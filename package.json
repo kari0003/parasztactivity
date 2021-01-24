@@ -27,8 +27,12 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
-    ]
+      "react-app/jest",
+      "@codingsans/eslint-config/typescript-recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/explicit-function-return-type": "off"
+    }
   },
   "browserslist": {
     "production": [
