@@ -3,7 +3,7 @@ import Header from './components/Header';
 
 function App(): JSX.Element {
   return (
-    <div className="container">
+    <div className="background container">
       <Header name={'Kekezovix'} roomId={'asdf'} connected={false}></Header>
       <div className="wrapper">
         <h1>Parasztactivity</h1>

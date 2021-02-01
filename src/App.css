@@ -1,6 +1,5 @@
 .container {
   text-align: center;
-  background-color: #382c34;
 }
 
 .header {
@@ -29,4 +28,22 @@
 
 a {
   color: #61dafb;
+}
+
+.background {
+  --bg: #302328;
+
+  background: linear-gradient(
+    71.565deg,
+    transparent 0%,
+    var(--bg) 0%,
+    var(--bg) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--bg) 50%,
+    var(--bg) 75%,
+    transparent 75%
+  );
+  background-size: 25px 75px;
+  background-color: #382c34;
 }
