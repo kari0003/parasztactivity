@@ -30,6 +30,26 @@ a {
   color: #61dafb;
 }
 
+button {
+  --bg: #222238;
+  --bg-light: #343238;
+
+  font-size: 1rem;
+  color: #f84;
+
+  background: linear-gradient(45deg, transparent 0%, var(--bg) 0%, var(--bg) 25%, transparent 25%) 0.5em 0,
+    linear-gradient(135deg, transparent 0%, var(--bg) 0%, var(--bg) 25%, transparent 25%) 1em 0.5em,
+    linear-gradient(225deg, transparent 0%, var(--bg) 0%, var(--bg) 25%, transparent 25%) 0.5em 1em,
+    linear-gradient(315deg, transparent 0%, var(--bg) 0%, var(--bg) 25%, transparent 25%) 0 0.5em;
+  background-color: var(--bg-light);
+  background-size: 1em 1em;
+  border-radius: 0.2em;
+  padding: 0.5em;
+  border-width: 4px;
+  border-color: #888ca4;
+  border-style: ridge;
+}
+
 .background {
   --bg: #302328;
 
