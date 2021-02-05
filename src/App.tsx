@@ -1,12 +1,9 @@
-import { useEffect, useReducer } from 'react';
+import { useReducer } from 'react';
 import { AppContext, initialAppState, reducer, State } from './state/app.context';
 import './App.css';
 import Header from './components/Header';
-import io from 'socket.io-client';
+import RoomList from './components/RoomList';
 import JoinForm from './components/JoinForm';
-
-//const SOCKET_SERVER = 'http://localhost:3005';
-const SOCKET_SERVER = 'https://parasztactivity.herokuapp.com';
 
 function App(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialAppState);
@@ -15,13 +12,6 @@ function App(): JSX.Element {
     state,
     dispatch,
   };
-
-  useEffect(() => {
-    const socket = io.connect(SOCKET_SERVER);
-    socket.on('connect', () => {
-      console.log('connected for dogs shake', socket.id);
-    });
-  }, []);
 
   return (
     <AppContext.Provider value={initialState}>
@@ -32,6 +22,7 @@ function App(): JSX.Element {
           <h1>Parasztactivity</h1>
           <img src={`${process.env.PUBLIC_URL}/fedora.png`} className="App-logo" alt="logo" />
           <p>Coming Soon</p>
+          <RoomList></RoomList>
         </div>
       </div>
     </AppContext.Provider>

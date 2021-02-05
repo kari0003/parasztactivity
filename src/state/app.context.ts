@@ -1,11 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
-import { joinRoom, leaveRoom } from './actions';
+import { Room } from '../interfaces';
+import { joinRoom, leaveRoom, listRoomsReply } from './actions';
 
 export interface AppState {
   name: string;
   roomId: string;
   connected: boolean;
+  rooms: Room[] | undefined;
 }
 
 export interface State {
@@ -17,6 +19,7 @@ export const initialAppState: AppState = {
   name: 'Főnökúr',
   roomId: 'Szoba 1',
   connected: false,
+  rooms: undefined,
 };
 
 export const reducer = createReducer(initialAppState, (builder) =>
@@ -28,6 +31,9 @@ export const reducer = createReducer(initialAppState, (builder) =>
     })
     .addCase(leaveRoom, (state) => {
       state.connected = false;
+    })
+    .addCase(listRoomsReply, (state, { payload }) => {
+      state.rooms = payload.rooms;
     })
     .addDefaultCase((state) => state),
 );

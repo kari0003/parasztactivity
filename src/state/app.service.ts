@@ -1,14 +1,28 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { connectRoom, joinRoom, createRoom } from './actions';
+import { Room } from '../interfaces';
+import { connectRoom, joinRoom, createRoom, listRoomsReply } from './actions';
 
-export const socketHandlerFactory = (socket: SocketIOClient.Socket, dispatch: React.Dispatch<AnyAction>) => {
+export type SocketHandler = {
+  listRooms: () => void;
+  createRoom: (payload: { roomName: string }) => void;
+  joinRoom: (payload: { name: string; roomId: string }) => void;
+};
+
+export const socketHandlerFactory = (
+  socket: SocketIOClient.Socket,
+  dispatch: React.Dispatch<AnyAction>,
+): SocketHandler => {
   socket.on('connect', (response: unknown) => {
-    console.log('response', response);
+    console.log('Connected! ', response);
     dispatch(connectRoom());
   });
 
   socket.on('nudge', (response: unknown) => {
     console.log('nudged', response);
+  });
+
+  socket.on('listRoomsReply', (response: Room[]) => {
+    dispatch(listRoomsReply({ rooms: response }));
   });
 
   return {
@@ -22,6 +36,11 @@ export const socketHandlerFactory = (socket: SocketIOClient.Socket, dispatch: Re
       dispatch(createRoom(payload));
 
       socket.emit('createRoom', payload.roomName);
+    },
+
+    listRooms: () => {
+      console.log('sending listRooms');
+      socket.emit('listRooms');
     },
   };
 };
