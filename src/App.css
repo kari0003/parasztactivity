@@ -9,11 +9,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   font-size: calc(10px + 0.5vmin);
   color: #d48824;
   padding-left: 2rem;
   padding-right: 2rem;
+
+  justify-content: space-between;
+}
+
+.header.notInRoom {
+  justify-content: flex-end;
 }
 
 .wrapper {
@@ -22,7 +27,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 1vmin);
   color: #d48824;
 }
 
@@ -45,6 +50,8 @@ button {
   background-size: 1em 1em;
   border-radius: 0.2em;
   padding: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
   border-width: 4px;
   border-color: #888ca4;
   border-style: ridge;
@@ -66,4 +73,17 @@ button {
   );
   background-size: 25px 75px;
   background-color: #382c34;
+}
+
+/* FORM */
+
+form button,
+form input,
+form select,
+form textarea {
+  font-family: inherit;
+  font-size: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }

@@ -4,6 +4,7 @@ import './App.css';
 import Header from './components/Header';
 import RoomList from './components/RoomList';
 import JoinForm from './components/JoinForm';
+import CreateRoomForm from './components/CreateRoomForm';
 
 function App(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialAppState);
@@ -18,8 +19,9 @@ function App(): JSX.Element {
       <div className="background container">
         <Header></Header>
         <div className="wrapper">
-          <JoinForm></JoinForm>
           <h1>Parasztactivity</h1>
+          {state.openForm === 'joinRoom' ? <JoinForm></JoinForm> : null}
+          {state.openForm === 'createRoom' ? <CreateRoomForm></CreateRoomForm> : null}
           <img src={`${process.env.PUBLIC_URL}/fedora.png`} className="App-logo" alt="logo" />
           <p>Coming Soon</p>
           <RoomList></RoomList>

@@ -1,9 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
 import { Room } from '../interfaces';
-import { joinRoom, leaveRoom, listRoomsReply } from './actions';
+import { joinRoom, leaveRoom, listRoomsReply, openCreateRoom, openJoinRoom } from './actions';
 
 export interface AppState {
+  openForm: 'createRoom' | 'joinRoom' | null;
   name: string;
   roomId: string;
   connected: boolean;
@@ -16,6 +17,7 @@ export interface State {
 }
 
 export const initialAppState: AppState = {
+  openForm: null,
   name: 'Főnökúr',
   roomId: 'Szoba 1',
   connected: false,
@@ -24,10 +26,18 @@ export const initialAppState: AppState = {
 
 export const reducer = createReducer(initialAppState, (builder) =>
   builder
+
+    .addCase(openCreateRoom, (state) => {
+      state.openForm = 'createRoom';
+    })
+    .addCase(openJoinRoom, (state) => {
+      state.openForm = 'joinRoom';
+    })
     .addCase(joinRoom, (state, action) => {
       state.name = action.payload.name;
       state.roomId = action.payload.roomId;
       state.connected = true;
+      state.openForm = null;
     })
     .addCase(leaveRoom, (state) => {
       state.connected = false;

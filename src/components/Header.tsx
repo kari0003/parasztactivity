@@ -1,4 +1,4 @@
-import { leaveRoom } from '../state/actions';
+import { openJoinRoom, openCreateRoom, leaveRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
 
 function Header(): JSX.Element {
@@ -10,6 +10,14 @@ function Header(): JSX.Element {
   const leaveRoomHandler = () => {
     dispatch(leaveRoom());
   };
+
+  const joinRoomHandler = () => {
+    dispatch(openJoinRoom());
+  };
+
+  const createRoomHandler = () => {
+    dispatch(openCreateRoom());
+  };
   return connected ? (
     <div className="header">
       <div>{name}</div>
@@ -19,8 +27,9 @@ function Header(): JSX.Element {
       </div>
     </div>
   ) : (
-    <div className="header">
-      <button onClick={leaveRoomHandler}>Join Room</button>
+    <div className="header notInRoom">
+      <button onClick={joinRoomHandler}>Join</button>
+      <button onClick={createRoomHandler}>Create</button>
     </div>
   );
 }

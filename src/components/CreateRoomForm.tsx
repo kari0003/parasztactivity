@@ -1,16 +1,13 @@
 import { FormEvent, useState } from 'react';
-import { joinRoom } from '../state/actions';
+import { createRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
 
-function JoinForm(): JSX.Element {
-  const {
-    state: { name, roomId },
-    dispatch,
-  } = useApp();
-  const [formState, setState] = useState({ name: name, roomId: roomId });
+function CreateRoomForm(): JSX.Element {
+  const { dispatch } = useApp();
+  const [formState, setState] = useState({ name: 'Vendégszoba' });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    connectRoomHandler();
+    createRoomHandler();
     event.preventDefault();
   };
 
@@ -18,24 +15,18 @@ function JoinForm(): JSX.Element {
     setState({ ...formState, [event.target.name]: event.target.value });
   };
 
-  const connectRoomHandler = () => {
-    dispatch(joinRoom({ name: formState.name, roomId: formState.roomId }));
+  const createRoomHandler = () => {
+    dispatch(createRoom({ roomName: formState.name }));
   };
 
   return (
     <div className="formContainer">
       <form onSubmit={handleSubmit}>
-        <h1>Join</h1>
+        <h1>Create Room</h1>
         <div>
           <label>
-            Name:
+            Room Name:
             <input type="text" name="name" value={formState.name} onChange={handleFormChange} />
-          </label>
-        </div>
-        <div>
-          <label>
-            Room:
-            <input type="text" name="roomId" value={formState.roomId} onChange={handleFormChange} />
           </label>
         </div>
         <div>
@@ -46,4 +37,4 @@ function JoinForm(): JSX.Element {
   );
 }
 
-export default JoinForm;
+export default CreateRoomForm;
