@@ -35,6 +35,29 @@ a {
   color: #61dafb;
 }
 
+@keyframes example {
+  from {
+    left: 0px;
+  }
+  to {
+    left: -30px;
+  }
+}
+
+.statusBar {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  overflow: hidden;
+  background-color: red;
+  padding: 4px;
+  border-radius: 0px 6px 0px 0px;
+
+  animation-name: example;
+  animation-duration: 2s;
+  animation-iteration-count: 3;
+}
+
 button {
   --bg: #222238;
   --bg-light: #343238;

@@ -2,6 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
 import { Room } from '../interfaces';
 import { joinRoom, leaveRoom, listRoomsReply, openCreateRoom, openJoinRoom } from './actions';
+import { ConnectionStatus } from './connection';
 
 export interface AppState {
   openForm: 'createRoom' | 'joinRoom' | null;
@@ -9,6 +10,9 @@ export interface AppState {
   roomId: string;
   connected: boolean;
   rooms: Room[] | undefined;
+  connection: {
+    status: ConnectionStatus;
+  };
 }
 
 export interface State {
@@ -22,6 +26,9 @@ export const initialAppState: AppState = {
   roomId: 'Szoba 1',
   connected: false,
   rooms: undefined,
+  connection: {
+    status: ConnectionStatus.CONNECTING,
+  },
 };
 
 export const reducer = createReducer(initialAppState, (builder) =>
