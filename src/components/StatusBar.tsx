@@ -4,7 +4,7 @@ import { ConnectionStatus } from '../state/connection';
 const getStatusText = (status: ConnectionStatus): string => {
   return `${status}: Status text`;
 };
-function JoinForm(): JSX.Element {
+function StatusBar(): JSX.Element {
   const {
     state: {
       connection: { status },
@@ -15,4 +15,4 @@ function JoinForm(): JSX.Element {
   return <div className="statusBar">{statusText}</div>;
 }
 
-export default JoinForm;
+export default StatusBar;
