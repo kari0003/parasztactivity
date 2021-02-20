@@ -12,5 +12,7 @@ export const createRoom = createAction<{ roomName: string }>('[Global] Create Ro
 export const createRoomReply = createAction<{ room: Room }>('[Global] Create Room Reply');
 export const listRoomsReply = createAction<{ rooms: Room[] }>('[Global] List Rooms Reply');
 
+export const chatMessageReceived = createAction<{ name: string; message: string }>('[Global] Chat Message Received');
+
 export const connectRoom = createAction('[Global] Connect Room');
 export const disconnectRoom = createAction<{ roomId: string }>('[Global] Disconnect Room');

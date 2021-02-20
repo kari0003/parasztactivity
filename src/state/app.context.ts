@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
-import { Room } from '../interfaces';
-import { joinRoom, leaveRoom, listRoomsReply, openCreateRoom, openJoinRoom } from './actions';
+import { ChatMessage, Room } from '../interfaces';
+import { chatMessageReceived, joinRoom, leaveRoom, listRoomsReply, openCreateRoom, openJoinRoom } from './actions';
 import { ConnectionStatus } from './connection';
 
 export interface AppState {
@@ -10,6 +10,9 @@ export interface AppState {
   roomId: string;
   connected: boolean;
   rooms: Room[] | undefined;
+  chat: {
+    messages: ChatMessage[];
+  };
   connection: {
     status: ConnectionStatus;
   };
@@ -26,6 +29,9 @@ export const initialAppState: AppState = {
   roomId: 'Szoba 1',
   connected: false,
   rooms: undefined,
+  chat: {
+    messages: [{ name: 'Portás', message: 'Szia Uram!' }],
+  },
   connection: {
     status: ConnectionStatus.CONNECTING,
   },
@@ -51,6 +57,9 @@ export const reducer = createReducer(initialAppState, (builder) =>
     })
     .addCase(listRoomsReply, (state, { payload }) => {
       state.rooms = payload.rooms;
+    })
+    .addCase(chatMessageReceived, (state, { payload }) => {
+      state.chat.messages.push(payload);
     })
     .addDefaultCase((state) => state),
 );

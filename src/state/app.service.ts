@@ -1,11 +1,12 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { Room } from '../interfaces';
-import { connectRoom, joinRoom, createRoom, listRoomsReply } from './actions';
+import { ChatMessage, Room } from '../interfaces';
+import { connectRoom, joinRoom, createRoom, listRoomsReply, chatMessageReceived } from './actions';
 
 export type SocketHandler = {
   listRooms: () => void;
   createRoom: (payload: { roomName: string }) => void;
   joinRoom: (payload: { name: string; roomId: string }) => void;
+  sendChatMessage: (payload: ChatMessage) => void;
 };
 
 export const socketHandlerFactory = (
@@ -25,6 +26,11 @@ export const socketHandlerFactory = (
     dispatch(listRoomsReply({ rooms: response }));
   });
 
+  socket.on('chatMessage', (chatMessage: ChatMessage) => {
+    console.log('message received', chatMessage);
+    dispatch(chatMessageReceived(chatMessage));
+  });
+
   return {
     joinRoom: (payload: { name: string; roomId: string }) => {
       dispatch(joinRoom(payload));
@@ -36,6 +42,11 @@ export const socketHandlerFactory = (
       dispatch(createRoom(payload));
 
       socket.emit('createRoom', payload.roomName);
+    },
+
+    sendChatMessage: (payload: ChatMessage) => {
+      console.log('sending chat message lol');
+      socket.emit('chatMessage', payload);
     },
 
     listRooms: () => {
