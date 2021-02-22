@@ -3,7 +3,7 @@ import Chat from './chat/Chat';
 
 function Lobby(): JSX.Element {
   const {
-    state: { roomId },
+    state: { roomName },
   } = useApp();
   const players = [{ name: 'Kek1' }, { name: 'Kek2' }, { name: 'Kek3' }];
 
@@ -12,7 +12,7 @@ function Lobby(): JSX.Element {
   });
   return (
     <div className="Lobby">
-      <h1>{roomId}</h1>
+      <h1>{roomName}</h1>
       <ul>{playerList}</ul>
       <Chat></Chat>
     </div>

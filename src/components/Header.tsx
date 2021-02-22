@@ -3,7 +3,7 @@ import { useApp } from '../state/app.context';
 
 function Header(): JSX.Element {
   const {
-    state: { name, roomId, connected },
+    state: { name, roomName, connected },
     dispatch,
   } = useApp();
 
@@ -21,7 +21,7 @@ function Header(): JSX.Element {
   return connected ? (
     <div className="header">
       <div>{name}</div>
-      <div>Room: {roomId}</div>
+      <div>Room: {roomName}</div>
       <div>
         <button onClick={leaveRoomHandler}>Leave Room</button>
       </div>

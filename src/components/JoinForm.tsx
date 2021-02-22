@@ -4,10 +4,10 @@ import { useApp } from '../state/app.context';
 
 function JoinForm(): JSX.Element {
   const {
-    state: { name, roomId },
+    state: { name, roomName },
     dispatch,
   } = useApp();
-  const [formState, setState] = useState({ name: name, roomId: roomId });
+  const [formState, setState] = useState({ name: name, roomName: roomName });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     connectRoomHandler();
@@ -19,7 +19,7 @@ function JoinForm(): JSX.Element {
   };
 
   const connectRoomHandler = () => {
-    dispatch(joinRoom({ name: formState.name, roomId: formState.roomId }));
+    dispatch(joinRoom({ name: formState.name, roomName: formState.roomName }));
   };
 
   return (
@@ -35,7 +35,7 @@ function JoinForm(): JSX.Element {
         <div>
           <label>
             Room:
-            <input type="text" name="roomId" value={formState.roomId} onChange={handleFormChange} />
+            <input type="text" name="roomName" value={formState.roomName} onChange={handleFormChange} />
           </label>
         </div>
         <div>

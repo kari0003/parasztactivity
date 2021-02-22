@@ -1,13 +1,21 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
 import { ChatMessage, Room } from '../interfaces';
-import { chatMessageReceived, joinRoom, leaveRoom, listRoomsReply, openCreateRoom, openJoinRoom } from './actions';
+import {
+  chatMessageReceived,
+  joinRoom,
+  joinRoomReply,
+  leaveRoom,
+  listRoomsReply,
+  openCreateRoom,
+  openJoinRoom,
+} from './actions';
 import { ConnectionStatus } from './connection';
 
 export interface AppState {
   openForm: 'createRoom' | 'joinRoom' | null;
   name: string;
-  roomId: string;
+  roomName: string;
   connected: boolean;
   rooms: Room[] | undefined;
   chat: {
@@ -26,7 +34,7 @@ export interface State {
 export const initialAppState: AppState = {
   openForm: null,
   name: 'Főnökúr',
-  roomId: 'Szoba 1',
+  roomName: 'Szoba 1',
   connected: false,
   rooms: undefined,
   chat: {
@@ -48,7 +56,13 @@ export const reducer = createReducer(initialAppState, (builder) =>
     })
     .addCase(joinRoom, (state, action) => {
       state.name = action.payload.name;
-      state.roomId = action.payload.roomId;
+      state.roomName = action.payload.roomName;
+      state.connected = true;
+      state.openForm = null;
+    })
+    .addCase(joinRoomReply, (state, action) => {
+      state.roomName = action.payload.room.name;
+      state.chat.messages = action.payload.room.messages;
       state.connected = true;
       state.openForm = null;
     })

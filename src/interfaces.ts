@@ -5,8 +5,10 @@ export enum RoomStatus {
 }
 
 export type ChatMessage = { name: string; message: string };
+
 export interface Room {
   name: string;
   id: number;
   status: RoomStatus;
+  messages: ChatMessage[];
 }

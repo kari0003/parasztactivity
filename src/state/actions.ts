@@ -4,7 +4,7 @@ import { Room } from '../interfaces';
 export const openJoinRoom = createAction('[Global] Open Join Room');
 export const openCreateRoom = createAction('[Global] Open Create Room');
 
-export const joinRoom = createAction<{ name: string; roomId: string }>('[Global] Join Room');
+export const joinRoom = createAction<{ name: string; roomName: string }>('[Global] Join Room');
 export const joinRoomReply = createAction<{ room: Room }>('[Global] Join Room Reply');
 export const leaveRoom = createAction('[Global] Leave Room');
 

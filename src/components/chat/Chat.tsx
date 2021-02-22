@@ -4,24 +4,26 @@ import { useSocketHandler } from '../../state/socket';
 import Message from './Message';
 
 function Chat(): JSX.Element {
-  const { state: appState, dispatch } = useApp();
+  const { state: appState } = useApp();
 
   const [formState, setState] = useState({ message: '' });
 
-  const socketHandler = useSocketHandler(dispatch);
+  const socketHandler = useSocketHandler();
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...formState, [event.target.name]: event.target.value });
   };
 
   const sendMessageHandler = () => {
-    console.log('send chat message', formState.message);
+    if (formState.message.length <= 0) {
+      return;
+    }
     const chatMessage = { name: appState.name, message: formState.message };
     setState({
       ...formState,
       message: '',
     });
-    socketHandler.sendChatMessage(chatMessage);
+    socketHandler.sendChatMessage({ roomName: appState.roomName, chatMessage });
   };
 
   return (
