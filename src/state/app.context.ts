@@ -7,10 +7,17 @@ import {
   joinRoomReply,
   leaveRoom,
   listRoomsReply,
+  onError,
   openCreateRoom,
   openJoinRoom,
 } from './actions';
 import { ConnectionStatus } from './connection';
+
+export type AppConnection = {
+  status: ConnectionStatus;
+  error: string | null;
+  message: string | null;
+};
 
 export interface AppState {
   openForm: 'createRoom' | 'joinRoom' | null;
@@ -21,9 +28,7 @@ export interface AppState {
   chat: {
     messages: ChatMessage[];
   };
-  connection: {
-    status: ConnectionStatus;
-  };
+  connection: AppConnection;
 }
 
 export interface State {
@@ -42,6 +47,8 @@ export const initialAppState: AppState = {
   },
   connection: {
     status: ConnectionStatus.CONNECTING,
+    error: null,
+    message: null,
   },
 };
 
@@ -74,6 +81,10 @@ export const reducer = createReducer(initialAppState, (builder) =>
     })
     .addCase(chatMessageReceived, (state, { payload }) => {
       state.chat.messages.push(payload);
+    })
+    .addCase(onError, (state, { payload }) => {
+      state.connection.error = payload.errorCode;
+      state.connection.message = payload.errorMessage;
     })
     .addDefaultCase((state) => state),
 );

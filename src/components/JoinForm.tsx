@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
-import { joinRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
+import { useSocketHandler } from '../state/socket';
 
 function JoinForm(): JSX.Element {
   const {
@@ -8,6 +8,8 @@ function JoinForm(): JSX.Element {
     dispatch,
   } = useApp();
   const [formState, setState] = useState({ name: name, roomName: roomName });
+
+  const socketHandler = useSocketHandler();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     connectRoomHandler();
@@ -19,7 +21,7 @@ function JoinForm(): JSX.Element {
   };
 
   const connectRoomHandler = () => {
-    dispatch(joinRoom({ name: formState.name, roomName: formState.roomName }));
+    socketHandler.joinRoom({ name: formState.name, roomName: formState.roomName });
   };
 
   return (

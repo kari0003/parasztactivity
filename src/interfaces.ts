@@ -12,3 +12,8 @@ export interface Room {
   status: RoomStatus;
   messages: ChatMessage[];
 }
+
+export type UserError = {
+  errorCode: string;
+  errorMessage: string;
+};

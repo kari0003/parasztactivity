@@ -1,6 +1,14 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { ChatMessage, Room } from '../interfaces';
-import { connectRoom, joinRoom, createRoom, listRoomsReply, chatMessageReceived, joinRoomReply } from './actions';
+import { ChatMessage, Room, RoomStatus, UserError } from '../interfaces';
+import {
+  connectRoom,
+  joinRoom,
+  createRoom,
+  listRoomsReply,
+  chatMessageReceived,
+  joinRoomReply,
+  onError,
+} from './actions';
 
 export type SocketHandler = {
   socket: SocketIOClient.Socket;
@@ -19,11 +27,12 @@ export const socketHandlerFactory = (
     dispatch(connectRoom());
   });
 
-  socket.on('nudge', (response: unknown) => {
-    console.log('nudged', response);
+  socket.on('error', (response: UserError) => {
+    dispatch(onError(response));
   });
 
-  socket.on('joinRoomReply', (response: { room: Room }) => {
+  socket.on('joinChannelReply', (response: { room: Room }) => {
+    dispatch(joinRoom({ name: 'xd', roomName: response.room.name }));
     dispatch(joinRoomReply(response));
   });
 
@@ -39,7 +48,7 @@ export const socketHandlerFactory = (
   return {
     socket,
     joinRoom: (payload: { name: string; roomName: string }) => {
-      dispatch(joinRoom(payload));
+      // dispatch(joinRoom(payload));
 
       socket.emit('joinRoom', payload);
     },

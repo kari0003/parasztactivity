@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Room } from '../interfaces';
+import { Room, UserError } from '../interfaces';
 
 export const openJoinRoom = createAction('[Global] Open Join Room');
 export const openCreateRoom = createAction('[Global] Open Create Room');
@@ -16,3 +16,5 @@ export const chatMessageReceived = createAction<{ name: string; message: string 
 
 export const connectRoom = createAction('[Global] Connect Room');
 export const disconnectRoom = createAction<{ roomId: string }>('[Global] Disconnect Room');
+
+export const onError = createAction<UserError>('[Global] On Error');

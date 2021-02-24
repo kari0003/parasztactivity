@@ -1,17 +1,14 @@
-import { useApp } from '../state/app.context';
-import { ConnectionStatus } from '../state/connection';
+import { useApp, AppConnection } from '../state/app.context';
 
-const getStatusText = (status: ConnectionStatus): string => {
-  return `${status}: Status text`;
+const getStatusText = (connection: AppConnection): string => {
+  return `${connection.status}: ${connection.message}`;
 };
 function StatusBar(): JSX.Element {
   const {
-    state: {
-      connection: { status },
-    },
+    state: { connection },
   } = useApp();
 
-  const statusText = getStatusText(status);
+  const statusText = getStatusText(connection);
   return <div className="statusBar">{statusText}</div>;
 }
 
