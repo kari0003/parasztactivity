@@ -1,5 +1,5 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { ChatMessage, Room, RoomStatus, UserError } from '../interfaces';
+import { ChatMessage, Room, Player, UserError } from '../interfaces';
 import {
   connectRoom,
   joinRoom,
@@ -32,12 +32,15 @@ export const socketHandlerFactory = (
   });
 
   socket.on('joinChannelReply', (response: { room: Room }) => {
-    dispatch(joinRoom({ name: 'xd', roomName: response.room.name }));
     dispatch(joinRoomReply(response));
   });
 
   socket.on('listRoomsReply', (response: Room[]) => {
     dispatch(listRoomsReply({ rooms: response }));
+  });
+
+  socket.on('profileReply', (response: Player) => {
+    // TODO
   });
 
   socket.on('chatMessageOut', (chatMessage: ChatMessage) => {
@@ -48,8 +51,6 @@ export const socketHandlerFactory = (
   return {
     socket,
     joinRoom: (payload: { name: string; roomName: string }) => {
-      // dispatch(joinRoom(payload));
-
       socket.emit('joinRoom', payload);
     },
 

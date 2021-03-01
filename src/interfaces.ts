@@ -17,3 +17,9 @@ export type UserError = {
   errorCode: string;
   errorMessage: string;
 };
+
+export interface Player {
+  id: string;
+  name: string;
+  lastUpdated: Date;
+}
