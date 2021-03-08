@@ -11,6 +11,7 @@ export interface Room {
   id: number;
   status: RoomStatus;
   messages: ChatMessage[];
+  players: Player[];
 }
 
 export type UserError = {

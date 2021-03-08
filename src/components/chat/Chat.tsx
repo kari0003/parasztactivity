@@ -23,7 +23,7 @@ function Chat(): JSX.Element {
       ...formState,
       message: '',
     });
-    socketHandler.sendChatMessage({ roomName: appState.roomName, chatMessage });
+    socketHandler.sendChatMessage({ roomName: appState.room ? appState.room.name : '', chatMessage });
   };
 
   return (

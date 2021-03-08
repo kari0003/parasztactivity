@@ -58,6 +58,14 @@ a {
   animation-iteration-count: 3;
 }
 
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: teal;
+}
+
 button {
   --bg: #222238;
   --bg-light: #343238;

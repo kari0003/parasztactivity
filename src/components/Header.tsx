@@ -1,13 +1,17 @@
 import { openJoinRoom, openCreateRoom, leaveRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
+import { useSocketHandler } from '../state/socket';
 
 function Header(): JSX.Element {
   const {
-    state: { name, roomName, connected },
+    state: { profile, room, connected },
     dispatch,
   } = useApp();
 
+  const socketHandler = useSocketHandler();
+
   const leaveRoomHandler = () => {
+    socketHandler.leaveRoom({ roomName: room ? room.name : '' });
     dispatch(leaveRoom());
   };
 
@@ -20,8 +24,8 @@ function Header(): JSX.Element {
   };
   return connected ? (
     <div className="header">
-      <div>{name}</div>
-      <div>Room: {roomName}</div>
+      <div>{profile?.name}</div>
+      <div>Room: {room ? room.name : ''}</div>
       <div>
         <button onClick={leaveRoomHandler}>Leave Room</button>
       </div>

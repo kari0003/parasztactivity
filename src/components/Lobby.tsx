@@ -1,18 +1,18 @@
+import { Player } from '../interfaces';
 import { useApp } from '../state/app.context';
 import Chat from './chat/Chat';
 
 function Lobby(): JSX.Element {
   const {
-    state: { roomName },
+    state: { room },
   } = useApp();
-  const players = [{ name: 'Kek1' }, { name: 'Kek2' }, { name: 'Kek3' }];
 
-  const playerList = players.map((player) => {
+  const playerList = (room ? room.players : ([] as Player[])).map((player) => {
     return <li key={player.name}>{player.name}</li>;
   });
   return (
     <div className="Lobby">
-      <h1>{roomName}</h1>
+      <h1>{room ? room.name : ''}</h1>
       <ul>{playerList}</ul>
       <Chat></Chat>
     </div>

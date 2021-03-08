@@ -2,12 +2,12 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { ChatMessage, Room, Player, UserError } from '../interfaces';
 import {
   connectRoom,
-  joinRoom,
   createRoom,
   listRoomsReply,
   chatMessageReceived,
   joinRoomReply,
   onError,
+  profileReceived,
 } from './actions';
 
 export type SocketHandler = {
@@ -15,6 +15,9 @@ export type SocketHandler = {
   listRooms: () => void;
   createRoom: (payload: { roomName: string }) => void;
   joinRoom: (payload: { name: string; roomName: string }) => void;
+  leaveRoom: (payload: { roomName: string }) => void;
+  setProfile: (payload: { name: string }) => void;
+  getProfile: () => void;
   sendChatMessage: (payload: { roomName: string; chatMessage: ChatMessage }) => void;
 };
 
@@ -40,7 +43,7 @@ export const socketHandlerFactory = (
   });
 
   socket.on('profileReply', (response: Player) => {
-    // TODO
+    dispatch(profileReceived(response));
   });
 
   socket.on('chatMessageOut', (chatMessage: ChatMessage) => {
@@ -53,6 +56,9 @@ export const socketHandlerFactory = (
     joinRoom: (payload: { name: string; roomName: string }) => {
       socket.emit('joinRoom', payload);
     },
+    leaveRoom: (payload: { roomName: string }) => {
+      socket.emit('leaveRoom', { roomName: payload.roomName });
+    },
 
     createRoom: (payload: { roomName: string }) => {
       dispatch(createRoom(payload));
@@ -60,13 +66,19 @@ export const socketHandlerFactory = (
       socket.emit('createRoom', payload.roomName);
     },
 
+    setProfile: (payload: { name: string }) => {
+      socket.emit('setProfile', { name: payload.name });
+    },
+
+    getProfile: () => {
+      socket.emit('getProfile');
+    },
+
     sendChatMessage: (payload) => {
-      console.log('sending chat message lol');
       socket.emit('chatMessage', payload);
     },
 
     listRooms: () => {
-      console.log('sending listRooms');
       socket.emit('listRooms');
     },
   };

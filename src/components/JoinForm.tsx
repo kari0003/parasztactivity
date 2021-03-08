@@ -4,10 +4,10 @@ import { useSocketHandler } from '../state/socket';
 
 function JoinForm(): JSX.Element {
   const {
-    state: { name, roomName },
+    state: { name, room },
     dispatch,
   } = useApp();
-  const [formState, setState] = useState({ name: name, roomName: roomName });
+  const [formState, setState] = useState({ name: name, roomName: room ? room.name : '' });
 
   const socketHandler = useSocketHandler();
 
@@ -18,6 +18,9 @@ function JoinForm(): JSX.Element {
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...formState, [event.target.name]: event.target.value });
+    if (event.target.name === 'name') {
+      socketHandler.setProfile({ name: event.target.value });
+    }
   };
 
   const connectRoomHandler = () => {

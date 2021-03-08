@@ -1,15 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
-import { ChatMessage, Room } from '../interfaces';
+import { ChatMessage, Room, Player } from '../interfaces';
 import {
   chatMessageReceived,
-  joinRoom,
   joinRoomReply,
   leaveRoom,
   listRoomsReply,
   onError,
   openCreateRoom,
   openJoinRoom,
+  profileReceived,
 } from './actions';
 import { ConnectionStatus } from './connection';
 
@@ -22,7 +22,8 @@ export type AppConnection = {
 export interface AppState {
   openForm: 'createRoom' | 'joinRoom' | null;
   name: string;
-  roomName: string;
+  profile: Player | undefined;
+  room: Room | undefined;
   connected: boolean;
   rooms: Room[] | undefined;
   chat: {
@@ -39,7 +40,8 @@ export interface State {
 export const initialAppState: AppState = {
   openForm: null,
   name: 'Főnökúr',
-  roomName: 'Szoba 1',
+  profile: undefined,
+  room: undefined,
   connected: false,
   rooms: undefined,
   chat: {
@@ -61,14 +63,8 @@ export const reducer = createReducer(initialAppState, (builder) =>
     .addCase(openJoinRoom, (state) => {
       state.openForm = 'joinRoom';
     })
-    .addCase(joinRoom, (state, action) => {
-      state.name = action.payload.name;
-      state.roomName = action.payload.roomName;
-      state.connected = true;
-      state.openForm = null;
-    })
     .addCase(joinRoomReply, (state, action) => {
-      state.roomName = action.payload.room.name;
+      state.room = action.payload.room;
       state.chat.messages = action.payload.room.messages;
       state.connected = true;
       state.openForm = null;
@@ -81,6 +77,10 @@ export const reducer = createReducer(initialAppState, (builder) =>
     })
     .addCase(chatMessageReceived, (state, { payload }) => {
       state.chat.messages.push(payload);
+    })
+    .addCase(profileReceived, (state, { payload }) => {
+      state.name = payload.name;
+      state.profile = payload;
     })
     .addCase(onError, (state, { payload }) => {
       state.connection.error = payload.errorCode;

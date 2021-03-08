@@ -7,6 +7,7 @@ import Lobby from './components/Lobby';
 import RoomList from './components/RoomList';
 import StatusBar from './components/StatusBar';
 import { AppContext, initialAppState, reducer, State } from './state/app.context';
+import { useSocketHandler } from './state/socket';
 
 function App(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialAppState);
