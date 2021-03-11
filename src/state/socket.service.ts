@@ -8,6 +8,7 @@ import {
   joinRoomReply,
   onError,
   profileReceived,
+  updateRoom,
 } from './actions';
 
 export type SocketHandler = {
@@ -44,6 +45,11 @@ export const socketHandlerFactory = (
 
   socket.on('profileReply', (response: Player) => {
     dispatch(profileReceived(response));
+  });
+
+  socket.on('updateRoom', (response: { room: Room }) => {
+    console.log('update room', response.room);
+    dispatch(updateRoom(response));
   });
 
   socket.on('chatMessageOut', (chatMessage: ChatMessage) => {

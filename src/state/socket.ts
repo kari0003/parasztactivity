@@ -1,8 +1,6 @@
-import { AnyAction } from '@reduxjs/toolkit';
-import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useApp } from './app.context';
-import { SocketHandler, socketHandlerFactory } from './app.service';
+import { SocketHandler, socketHandlerFactory } from './socket.service';
 
 const SOCKET_SERVER = 'http://localhost:3005';
 //const SOCKET_SERVER = 'https://parasztactivity.herokuapp.com';

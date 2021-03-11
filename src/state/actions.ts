@@ -10,6 +10,7 @@ export const leaveRoom = createAction('[Global] Leave Room');
 export const createRoom = createAction<{ roomName: string }>('[Global] Create Room');
 export const createRoomReply = createAction<{ room: Room }>('[Global] Create Room Reply');
 export const listRoomsReply = createAction<{ rooms: Room[] }>('[Global] List Rooms Reply');
+export const updateRoom = createAction<{ room: Room }>('[Global] Update Room');
 
 export const chatMessageReceived = createAction<ChatMessage>('[Global] Chat Message Received');
 export const profileReceived = createAction<Player>('[Global] Profile received');

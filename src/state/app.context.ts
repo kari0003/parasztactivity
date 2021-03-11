@@ -9,6 +9,7 @@ import {
   onError,
   openCreateRoom,
   openJoinRoom,
+  updateRoom,
   profileReceived,
 } from './actions';
 import { ConnectionStatus } from './connection';
@@ -68,6 +69,9 @@ export const reducer = createReducer(initialAppState, (builder) =>
       state.chat.messages = action.payload.room.messages;
       state.connected = true;
       state.openForm = null;
+    })
+    .addCase(updateRoom, (state, action) => {
+      state.room = action.payload.room;
     })
     .addCase(leaveRoom, (state) => {
       state.connected = false;
