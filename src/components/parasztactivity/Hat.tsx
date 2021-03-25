@@ -19,9 +19,9 @@ function Hat(): JSX.Element {
   };
 
   return (
-    <div>
+    <div className="game">
       <form onSubmit={handleSubmit}>
-        <h1>Join</h1>
+        <h1>Set Up</h1>
         <div>
           <label>
             Add word to Hat:

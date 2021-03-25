@@ -28,3 +28,13 @@
 .chatMessage {
   color: #000000;
 }
+
+.chatSend form {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+}
+
+.chatSend form input {
+  margin-left: 3px;
+}

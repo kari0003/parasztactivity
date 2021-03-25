@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useApp } from '../../state/app.context';
 import { useSocketHandler } from '../../state/socket';
 import Message from './Message';
@@ -15,7 +15,9 @@ function Chat(): JSX.Element {
     setState({ ...formState, [event.target.name]: event.target.value });
   };
 
-  const sendMessageHandler = () => {
+  const sendMessageHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     if (formState.message.length <= 0) {
       return;
     }
@@ -35,8 +37,10 @@ function Chat(): JSX.Element {
         })}
       </div>
       <div className="chatSend">
-        <input type="text" name="message" value={formState.message} onChange={handleFormChange} />
-        <button onClick={sendMessageHandler}>Send message</button>
+        <form onSubmit={sendMessageHandler}>
+          <input type="text" name="message" value={formState.message} onChange={handleFormChange} />
+          <input type="submit" value="Send" />
+        </form>
       </div>
     </div>
   );

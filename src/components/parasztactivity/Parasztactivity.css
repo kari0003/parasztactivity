@@ -1,4 +1,22 @@
 .chatWrapper {
   height: 400px;
-  width: 400px;
+}
+
+.parasztactivityContainer {
+  margin-right: 2rem;
+  margin-left: 2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  flex: 80%;
+}
+
+.social {
+  display: flex;
+  flex-direction: column;
+  flex: 20%;
 }

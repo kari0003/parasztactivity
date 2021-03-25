@@ -15,10 +15,12 @@ function Parasztactivity(): JSX.Element {
   });
 
   return (
-    <div className="wrapper">
+    <div className="wrapper parasztactivityContainer">
       <Hat></Hat>
-      <Chat></Chat>
-      <Leaderboard></Leaderboard>
+      <div className="social">
+        <Chat></Chat>
+        <Leaderboard></Leaderboard>
+      </div>
     </div>
   );
 }
