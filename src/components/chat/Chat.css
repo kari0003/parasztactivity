@@ -1,0 +1,30 @@
+.chatWrapper {
+  padding: 1rem;
+
+  border-radius: 0.5rem;
+  border-color: rebeccapurple;
+  border-style: groove;
+  border-width: 3px;
+  background: rgba(255, 226, 190, 0.5);
+  box-shadow: 0 0 12px 6px #382c348f inset;
+  backdrop-filter: brightness(1.5);
+
+  color: #383b3e;
+  font-size: smaller;
+  text-align: left;
+}
+
+.messageScroll {
+  height: calc(100% - 3rem);
+  overflow-x: scroll;
+  overflow-x: hidden;
+  margin-bottom: 1rem;
+}
+
+.chatSender {
+  font-weight: bold;
+}
+
+.chatMessage {
+  color: #000000;
+}

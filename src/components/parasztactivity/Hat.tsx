@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
 import { useSocketHandler } from '../../state/socket';
 
-function Header(): JSX.Element {
+function Hat(): JSX.Element {
   const state = useParasztActivity();
 
   const [formState, setState] = useState({ word: '' });
@@ -35,4 +35,4 @@ function Header(): JSX.Element {
   );
 }
 
-export default Header;
+export default Hat;

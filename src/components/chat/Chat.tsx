@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../../state/app.context';
 import { useSocketHandler } from '../../state/socket';
 import Message from './Message';
+import './Chat.css';
 
 function Chat(): JSX.Element {
   const { state: appState } = useApp();
@@ -27,7 +28,7 @@ function Chat(): JSX.Element {
   };
 
   return (
-    <div className="wrapper">
+    <div className="chatWrapper">
       <div className="messageScroll">
         {appState.chat.messages.map((message, id) => {
           return <Message key={id} name={message.name} message={message.message}></Message>;

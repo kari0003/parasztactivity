@@ -1,7 +1,7 @@
 function Message({ name, message }: { name: string; message: string }): JSX.Element {
   return (
     <div className="messageWrapper">
-      <span>{name}</span> : <span>{message}</span>
+      <span className="chatSender">{name}:</span> <span className="chatMessage">{message}</span>
     </div>
   );
 }
