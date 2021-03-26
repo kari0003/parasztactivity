@@ -18,8 +18,12 @@ function Parasztactivity(): JSX.Element {
     <div className="wrapper parasztactivityContainer">
       <Hat></Hat>
       <div className="social">
-        <Chat></Chat>
-        <Leaderboard></Leaderboard>
+        <div className="chat">
+          <Chat></Chat>
+        </div>
+        <div className="leaderboard">
+          <Leaderboard></Leaderboard>
+        </div>
       </div>
     </div>
   );

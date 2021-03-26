@@ -26,6 +26,6 @@ export const initialState: ParasztActivityState = {
   scores: {},
 };
 
-export const ParasztActivityContext = createContext({} as ParasztActivityState);
+export const ParasztActivityContext = createContext(initialState);
 
 export const useParasztActivity = () => useContext(ParasztActivityContext);
