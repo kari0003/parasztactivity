@@ -1,7 +1,7 @@
 import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
 import Timer from './Timer';
 
-function Hat(): JSX.Element {
+function Guesser(): JSX.Element {
   const state = useParasztActivity();
   const currentWord = state.currentWord || 'Állapotmentes';
 
@@ -14,12 +14,10 @@ function Hat(): JSX.Element {
         <img src={`${process.env.PUBLIC_URL}/fedora.png`} className="hatImage" alt="hat" />
         <div className="hatOverlay">
           <Timer></Timer>
-          <button>Draw</button>
-          <button>Return to Hat</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Hat;
+export default Guesser;

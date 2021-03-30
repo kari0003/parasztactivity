@@ -10,9 +10,11 @@ import {
   profileReceived,
   updateRoom,
 } from './actions';
+import { ParasztactivityHandler, parasztactivityHandlerFactory } from './parasztactivity/parasztactivity.handler';
 
 export type SocketHandler = {
   socket: SocketIOClient.Socket;
+  parasztactivityHandler: ParasztactivityHandler;
   listRooms: () => void;
   createRoom: (payload: { roomName: string }) => void;
   joinRoom: (payload: { name: string; roomName: string }) => void;
@@ -26,6 +28,8 @@ export const socketHandlerFactory = (
   socket: SocketIOClient.Socket,
   dispatch: React.Dispatch<AnyAction>,
 ): SocketHandler => {
+  const parasztactivityHandler = parasztactivityHandlerFactory(socket, dispatch);
+
   socket.on('connect', (response: unknown) => {
     console.log('Connected! ', response);
     dispatch(connectRoom());
@@ -59,6 +63,7 @@ export const socketHandlerFactory = (
 
   return {
     socket,
+    parasztactivityHandler,
     joinRoom: (payload: { name: string; roomName: string }) => {
       socket.emit('joinRoom', payload);
     },

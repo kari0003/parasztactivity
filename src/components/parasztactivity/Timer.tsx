@@ -1,15 +1,25 @@
+import { useEffect, useState } from 'react';
 import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
 
 function Timer(): JSX.Element {
   const { currentTurnStart } = useParasztActivity();
 
-  const timeElapsed = Date.now() - new Date(currentTurnStart || '2021-03-26 09:03').getTime();
+  const [seconds, setSeconds] = useState(0);
 
-  const elapsedSeconds = Math.floor(timeElapsed / 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentTurnStart) {
+        const timeElapsed = Date.now() - new Date(currentTurnStart).getTime();
+        const elapsedSeconds = Math.floor(timeElapsed / 1000);
+        setSeconds(elapsedSeconds);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 
   return (
-    <div>
-      {Math.floor(elapsedSeconds / 60)} : {elapsedSeconds % 60}
+    <div className="timer">
+      {Math.floor(seconds / 60)} : {seconds % 60}
     </div>
   );
 }

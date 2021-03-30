@@ -2,6 +2,9 @@ import { createContext, useContext } from 'react';
 
 export type ParasztActivityState = {
   roomId: number;
+  gameStarted: boolean;
+  roundOver: boolean;
+  gameOver: boolean;
   currentPlayer: string | null;
   currentWord: string | null;
   currentTurnStart: number | null;
@@ -15,6 +18,9 @@ export type ParasztActivityState = {
 
 export const initialState: ParasztActivityState = {
   roomId: -1,
+  gameStarted: false,
+  roundOver: false,
+  gameOver: false,
   currentPlayer: null,
   currentWord: null,
   currentTurnStart: null,

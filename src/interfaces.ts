@@ -24,3 +24,10 @@ export interface Player {
   name: string;
   lastUpdated: Date;
 }
+
+export interface GameEvent {
+  game: string;
+  eventType: string;
+  roomId: number;
+  payload: unknown;
+}

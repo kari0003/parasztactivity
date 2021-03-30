@@ -50,6 +50,38 @@
   flex: 40%;
 }
 
+.hatContainer {
+  position: relative;
+}
 .hatImage {
   transform: rotate(165deg) scale(0.6, 0.5);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.hatOverlay {
+  position: absolute;
+  float: left;
+  z-index: 1;
+  top: calc(50% - 2rem - 2vmin - 10px);
+  left: calc(50% - 7rem);
+  text-align: center;
+}
+
+.statusOverlay {
+  position: absolute;
+  float: left;
+  z-index: 2;
+  top: 6rem;
+  left: calc(50% - 7rem);
+  text-align: center;
+}
+
+.timer {
+  color: white;
+  font-size: calc(10px + 2vmin);
+  line-height: calc(10px + 2vmin);
+  font-weight: bolder;
+  padding: 1rem;
 }
