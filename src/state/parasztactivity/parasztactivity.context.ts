@@ -1,4 +1,6 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { createContext, useContext } from 'react';
+import { ParasztactivityActions } from './parasztactivity.actions';
 
 export type ParasztActivityState = {
   roomId: number;
@@ -31,6 +33,12 @@ export const initialState: ParasztActivityState = {
   },
   scores: {},
 };
+
+export const reducer = createReducer(initialState, (builder) =>
+  builder.addCase(ParasztactivityActions.gameState, (state, { payload }) => {
+    state = { ...state, ...payload };
+  }),
+);
 
 export const ParasztActivityContext = createContext(initialState);
 

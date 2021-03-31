@@ -2,7 +2,6 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { ChatMessage, Room, Player, UserError } from '../interfaces';
 import {
   connectRoom,
-  createRoom,
   listRoomsReply,
   chatMessageReceived,
   joinRoomReply,
@@ -14,7 +13,6 @@ import { ParasztactivityHandler, parasztactivityHandlerFactory } from './paraszt
 
 export type SocketHandler = {
   socket: SocketIOClient.Socket;
-  parasztactivityHandler: ParasztactivityHandler;
   listRooms: () => void;
   createRoom: (payload: { roomName: string }) => void;
   joinRoom: (payload: { name: string; roomName: string }) => void;
@@ -28,8 +26,6 @@ export const socketHandlerFactory = (
   socket: SocketIOClient.Socket,
   dispatch: React.Dispatch<AnyAction>,
 ): SocketHandler => {
-  const parasztactivityHandler = parasztactivityHandlerFactory(socket, dispatch);
-
   socket.on('connect', (response: unknown) => {
     console.log('Connected! ', response);
     dispatch(connectRoom());
@@ -63,7 +59,6 @@ export const socketHandlerFactory = (
 
   return {
     socket,
-    parasztactivityHandler,
     joinRoom: (payload: { name: string; roomName: string }) => {
       socket.emit('joinRoom', payload);
     },
@@ -72,8 +67,6 @@ export const socketHandlerFactory = (
     },
 
     createRoom: (payload: { roomName: string }) => {
-      dispatch(createRoom(payload));
-
       socket.emit('createRoom', payload.roomName);
     },
 

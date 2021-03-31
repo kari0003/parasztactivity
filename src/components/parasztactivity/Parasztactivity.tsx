@@ -1,6 +1,7 @@
+import { useReducer } from 'react';
 import { Player } from '../../interfaces';
 import { useApp } from '../../state/app.context';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
+import { initialState, reducer, useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
 import Chat from '../chat/Chat';
 import Guesser from './Guesser';
 import Hat from './Hat';
@@ -12,7 +13,7 @@ import Status from './Status';
 
 function Parasztactivity(): JSX.Element {
   const { state: appState } = useApp();
-  const state = useParasztActivity();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const gameContent = state.gameStarted ? (
     state.currentPlayer === appState.profile?.id ? (

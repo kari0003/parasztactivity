@@ -1,10 +1,13 @@
 import { FormEvent, useState } from 'react';
-import { useSocketHandler } from '../../state/socket';
+import { useApp } from '../../state/app.context';
+import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
+import { useParasztActivitySocketHandler } from '../../state/socket';
 
 function Setup(): JSX.Element {
+  const { state } = useApp();
   const [formState, setState] = useState({ word: '' });
 
-  const { parasztactivityHandler } = useSocketHandler();
+  const parasztactivityHandler = useParasztActivitySocketHandler();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     parasztactivityHandler.addWord(formState.word);

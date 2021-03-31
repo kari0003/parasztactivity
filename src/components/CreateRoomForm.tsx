@@ -1,10 +1,7 @@
 import { FormEvent, useState } from 'react';
-import { createRoom } from '../state/actions';
-import { useApp } from '../state/app.context';
 import { useSocketHandler } from '../state/socket';
 
 function CreateRoomForm(): JSX.Element {
-  const { dispatch } = useApp();
   const [formState, setState] = useState({ name: 'Vendégszoba' });
 
   const socketHandler = useSocketHandler();

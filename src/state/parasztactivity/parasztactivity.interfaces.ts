@@ -18,6 +18,18 @@ export interface ParasztactivityEvent extends GameEvent {
   payload: Payloads;
 }
 
+export type PublicGameState = {
+  roomId: number;
+  currentPlayer: string | null;
+  currentTurnStart: number | null;
+  settings: {
+    minWordPerPlayer: number;
+    maxWordPerPlayer: number;
+    turnLengthSeconds: number;
+  };
+  scores: { [playerId: string]: number };
+};
+
 export type AddWordPayload = {
   playerId: string;
   word: string;
