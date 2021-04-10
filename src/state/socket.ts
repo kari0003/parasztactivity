@@ -1,49 +1,39 @@
-import { Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import { AnyAction } from 'redux';
 import io from 'socket.io-client';
 import { useApp } from './app.context';
-import { ParasztactivityHandler, parasztactivityHandlerFactory } from './parasztactivity/parasztactivity.handler';
 import { SocketHandler, socketHandlerFactory } from './socket.service';
 
 const SOCKET_SERVER = 'http://localhost:3005';
 //const SOCKET_SERVER = 'https://parasztactivity.herokuapp.com';
 
-let socket: SocketIOClient.Socket;
-let handler: SocketHandler;
-let pHandlerDict: ParasztactivityHandler;
-
-const getSocketSingleton = (): SocketIOClient.Socket => {
+export const useSocketSingleton = (): SocketIOClient.Socket => {
+  const [socket, setSocket] = useState<SocketIOClient.Socket | undefined>(undefined);
   if (!socket) {
-    socket = io.connect(SOCKET_SERVER);
-  }
-  if (socket.disconnected) {
-    socket.connect();
+    console.log('forgot socket :(');
+    const newSocket = io.connect(SOCKET_SERVER);
+    setSocket(newSocket);
+    return newSocket;
   }
   return socket;
 };
 
-const getHandlerSingleton = (dispatch: Dispatch<AnyAction>): SocketHandler => {
+const useHandlerSingleton = (dispatch: Dispatch<AnyAction>): SocketHandler => {
+  const [handler, setHandler] = useState<SocketHandler | undefined>(undefined);
+  const singletonSocket = useSocketSingleton();
+  if (!singletonSocket) {
+    throw new Error('Socket not yet initialized!');
+  }
   if (!handler) {
-    const socket = getSocketSingleton();
-    handler = socketHandlerFactory(socket, dispatch);
+    console.log('registering handler');
+    const newHandler = socketHandlerFactory(singletonSocket, dispatch);
+    setHandler(newHandler);
+    return newHandler;
   }
   return handler;
 };
 
 export const useSocketHandler = (): SocketHandler => {
   const { dispatch } = useApp();
-  return getHandlerSingleton(dispatch);
-};
-
-const getPSingleton = (dispatch: Dispatch<AnyAction>, roomId: number | undefined): ParasztactivityHandler => {
-  if (!pHandlerDict) {
-    const socket = getSocketSingleton();
-    pHandlerDict = parasztactivityHandlerFactory(socket, dispatch, roomId);
-  }
-  return pHandlerDict;
-};
-
-export const useParasztActivitySocketHandler = () => {
-  const { dispatch, state } = useApp();
-  return getPSingleton(dispatch, state.room?.id);
+  return useHandlerSingleton(dispatch);
 };

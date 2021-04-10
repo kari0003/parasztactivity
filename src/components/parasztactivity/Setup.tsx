@@ -1,13 +1,10 @@
 import { FormEvent, useState } from 'react';
-import { useApp } from '../../state/app.context';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
-import { useParasztActivitySocketHandler } from '../../state/socket';
+import { useSingletonParasztactivityHandler } from '../../state/parasztactivity/parasztactivity.handler';
 
-function Setup(): JSX.Element {
-  const { state } = useApp();
+function Setup({ roomId }: { roomId: number }): JSX.Element {
   const [formState, setState] = useState({ word: '' });
 
-  const parasztactivityHandler = useParasztActivitySocketHandler();
+  const parasztactivityHandler = useSingletonParasztactivityHandler(roomId);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     parasztactivityHandler.addWord(formState.word);

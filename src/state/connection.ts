@@ -1,6 +1,6 @@
 export enum ConnectionStatus {
-  CONNECTING,
-  CONNECTED,
-  DISCONNECTED,
-  RETRYING,
+  CONNECTING = 'connecting',
+  CONNECTED = 'connected',
+  DISCONNECTED = 'disconnected',
+  RETRYING = 'retrying',
 }

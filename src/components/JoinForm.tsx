@@ -5,7 +5,6 @@ import { useSocketHandler } from '../state/socket';
 function JoinForm(): JSX.Element {
   const {
     state: { name, room },
-    dispatch,
   } = useApp();
   const [formState, setState] = useState({ name: name, roomName: room ? room.name : '' });
 

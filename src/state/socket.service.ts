@@ -9,7 +9,6 @@ import {
   profileReceived,
   updateRoom,
 } from './actions';
-import { ParasztactivityHandler, parasztactivityHandlerFactory } from './parasztactivity/parasztactivity.handler';
 
 export type SocketHandler = {
   socket: SocketIOClient.Socket;
@@ -26,8 +25,8 @@ export const socketHandlerFactory = (
   socket: SocketIOClient.Socket,
   dispatch: React.Dispatch<AnyAction>,
 ): SocketHandler => {
-  socket.on('connect', (response: unknown) => {
-    console.log('Connected! ', response);
+  socket.on('connect', () => {
+    console.log('Connected!');
     dispatch(connectRoom());
   });
 

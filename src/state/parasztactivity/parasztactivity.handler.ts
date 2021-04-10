@@ -1,16 +1,22 @@
 import { AnyAction } from 'redux';
-import { AddWordPayload, ParasztactivityEvent } from './parasztactivity.interfaces';
+import { AddWordPayload, ParasztactivityEvent, PublicGameState } from './parasztactivity.interfaces';
 import { ParasztactivityActions } from './parasztactivity.actions';
-import { Room } from '../../interfaces';
+import { useApp } from '../app.context';
+import { useSocketSingleton } from '../socket';
+import { useState } from 'react';
 
-export type ParasztactivityHandler = ReturnType<typeof parasztactivityHandlerFactory>;
+export type ParasztactivityHandler = {
+  getState: () => void;
+  init: () => void;
+  addWord: (word: string) => void;
+};
 
 export const parasztactivityHandlerFactory = (
   socket: SocketIOClient.Socket,
   dispatch: React.Dispatch<AnyAction>,
   roomId: number | undefined,
-) => {
-  socket.on('gameState', (payload: { gameState: any }) => {
+): ParasztactivityHandler => {
+  socket.on('gameState', (payload: { gameState: PublicGameState }) => {
     dispatch(ParasztactivityActions.gameState(payload.gameState));
   });
 
@@ -22,7 +28,7 @@ export const parasztactivityHandlerFactory = (
     getState();
   });
 
-  const getState = () => {
+  const getState = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -30,7 +36,7 @@ export const parasztactivityHandlerFactory = (
     socket.emit('getGameState', { game: 'parasztactivity', roomId });
   };
 
-  const init = () => {
+  const init = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -38,7 +44,7 @@ export const parasztactivityHandlerFactory = (
     socket.emit('initGame', { game: 'parasztactivity', roomId });
   };
 
-  const addWord = (word: string) => {
+  const addWord = (word: string): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -62,4 +68,20 @@ export const parasztactivityHandlerFactory = (
     init,
     addWord,
   };
+};
+
+export const useSingletonParasztactivityHandler = (roomId: number | undefined): ParasztactivityHandler => {
+  const [handlers, setHandlers] = useState<Record<number, ParasztactivityHandler>>({});
+  if (roomId === undefined) {
+    throw new Error('roomId cannot be undefined');
+  }
+  const { dispatch } = useApp();
+  const socket = useSocketSingleton();
+  if (!handlers[roomId]) {
+    const newHandler = parasztactivityHandlerFactory(socket, dispatch, roomId);
+    setHandlers({ ...handlers, [roomId]: newHandler });
+
+    return newHandler;
+  }
+  return handlers[roomId];
 };

@@ -42,4 +42,4 @@ export const reducer = createReducer(initialState, (builder) =>
 
 export const ParasztActivityContext = createContext(initialState);
 
-export const useParasztActivity = () => useContext(ParasztActivityContext);
+export const useParasztActivity = (): ParasztActivityState => useContext(ParasztActivityContext);

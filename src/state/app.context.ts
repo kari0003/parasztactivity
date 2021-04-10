@@ -1,4 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { AnyAction, createReducer } from '@reduxjs/toolkit';
 import { createContext, Dispatch, useContext } from 'react';
 import { ChatMessage, Room, Player } from '../interfaces';
 import {
@@ -35,7 +35,7 @@ export interface AppState {
 
 export interface State {
   state: AppState;
-  dispatch: Dispatch<any>;
+  dispatch: Dispatch<AnyAction>;
 }
 
 export const initialAppState: AppState = {
@@ -95,4 +95,4 @@ export const reducer = createReducer(initialAppState, (builder) =>
 
 export const AppContext = createContext({} as State);
 
-export const useApp = () => useContext(AppContext);
+export const useApp = (): State => useContext(AppContext);
