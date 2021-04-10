@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
+import { applyMiddleware } from 'redux';
 import './App.css';
 import CreateRoomForm from './components/CreateRoomForm';
 import Header from './components/Header';
@@ -7,9 +8,19 @@ import Lobby from './components/Lobby';
 import RoomList from './components/RoomList';
 import StatusBar from './components/StatusBar';
 import { AppContext, initialAppState, reducer, State } from './state/app.context';
+import { useSocket, useSocketEventHandler } from './state/socket';
 
 function App(): JSX.Element {
-  const [state, dispatch] = useReducer(reducer, initialAppState);
+  const existingToken = sessionStorage.getItem('token');
+  const [state, dispatch] = useReducer(reducer, { ...initialAppState, token: existingToken });
+  useSocketEventHandler(dispatch);
+
+  const socket = useSocket();
+
+  useEffect(() => {
+    console.log('handshaking', socket.id, state.token);
+    socket.emit('handshake', { token: state.token });
+  }, [socket]);
 
   const initialState: State = {
     state,
@@ -18,6 +29,7 @@ function App(): JSX.Element {
 
   return (
     <AppContext.Provider value={initialState}>
+      <StatusBar></StatusBar>
       <div className="background container">
         <Header></Header>
         <div className="wrapper">
@@ -35,7 +47,6 @@ function App(): JSX.Element {
           )}
         </div>
       </div>
-      <StatusBar></StatusBar>
     </AppContext.Provider>
   );
 }

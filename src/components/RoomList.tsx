@@ -1,12 +1,12 @@
 import { useApp } from '../state/app.context';
-import { useSocketHandler } from '../state/socket';
+import { useLobbyEmitter } from '../state/socket.service';
 
 function RoomList(): JSX.Element {
   const {
     state: { rooms, name },
   } = useApp();
 
-  const socketHandler = useSocketHandler();
+  const socketHandler = useLobbyEmitter();
 
   const listRoomsHandler = () => {
     console.log('listing Rooms');

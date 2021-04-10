@@ -14,7 +14,10 @@ export const updateRoom = createAction<{ room: Room }>('[Global] Update Room');
 export const chatMessageReceived = createAction<ChatMessage>('[Global] Chat Message Received');
 export const profileReceived = createAction<Player>('[Global] Profile received');
 
-export const connectRoom = createAction('[Global] Connect Room');
+export const connect = createAction('[Global] Socket Connect');
+export const disconnect = createAction('[Global] Socket Disconnect');
+export const handshakeReply = createAction<{ token: string }>('[Global] handshakeReply');
+
 export const disconnectRoom = createAction<{ roomId: string }>('[Global] Disconnect Room');
 
 export const onError = createAction<UserError>('[Global] On Error');

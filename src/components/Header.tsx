@@ -1,6 +1,6 @@
 import { openJoinRoom, openCreateRoom, leaveRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
-import { useSocketHandler } from '../state/socket';
+import { useLobbyEmitter } from '../state/socket.service';
 
 function Header(): JSX.Element {
   const {
@@ -8,7 +8,7 @@ function Header(): JSX.Element {
     dispatch,
   } = useApp();
 
-  const socketHandler = useSocketHandler();
+  const socketHandler = useLobbyEmitter();
 
   const leaveRoomHandler = () => {
     socketHandler.leaveRoom({ roomName: room ? room.name : '' });

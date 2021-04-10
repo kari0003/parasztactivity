@@ -1,9 +1,8 @@
 import { AnyAction } from 'redux';
 import { AddWordPayload, ParasztactivityEvent, PublicGameState } from './parasztactivity.interfaces';
 import { ParasztactivityActions } from './parasztactivity.actions';
-import { useApp } from '../app.context';
-import { useSocketSingleton } from '../socket';
-import { useState } from 'react';
+import { useSocket } from '../socket';
+import React, { useState } from 'react';
 
 export type ParasztactivityHandler = {
   getState: () => void;
@@ -11,23 +10,19 @@ export type ParasztactivityHandler = {
   addWord: (word: string) => void;
 };
 
-export const parasztactivityHandlerFactory = (
+export const registerParasztactivityHandler = (
   socket: SocketIOClient.Socket,
   dispatch: React.Dispatch<AnyAction>,
-  roomId: number | undefined,
-): ParasztactivityHandler => {
+): void => {
   socket.on('gameState', (payload: { gameState: PublicGameState }) => {
     dispatch(ParasztactivityActions.gameState(payload.gameState));
   });
+};
 
-  socket.on('createRoomReply', () => {
-    init();
-  });
-
-  socket.on('joinChannelReply', () => {
-    getState();
-  });
-
+export const parasztactivityHandlerFactory = (
+  socket: SocketIOClient.Socket,
+  roomId: number | undefined,
+): ParasztactivityHandler => {
   const getState = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
@@ -75,10 +70,12 @@ export const useSingletonParasztactivityHandler = (roomId: number | undefined): 
   if (roomId === undefined) {
     throw new Error('roomId cannot be undefined');
   }
-  const { dispatch } = useApp();
-  const socket = useSocketSingleton();
+  const socket = useSocket();
+  if (socket === undefined) {
+    throw new Error('socket cannot be undefined');
+  }
   if (!handlers[roomId]) {
-    const newHandler = parasztactivityHandlerFactory(socket, dispatch, roomId);
+    const newHandler = parasztactivityHandlerFactory(socket, roomId);
     setHandlers({ ...handlers, [roomId]: newHandler });
 
     return newHandler;

@@ -1,10 +1,10 @@
 import { FormEvent, useState } from 'react';
-import { useSocketHandler } from '../state/socket';
+import { useLobbyEmitter } from '../state/socket.service';
 
 function CreateRoomForm(): JSX.Element {
   const [formState, setState] = useState({ name: 'Vendégszoba' });
 
-  const socketHandler = useSocketHandler();
+  const socketHandler = useLobbyEmitter();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     createRoomHandler();

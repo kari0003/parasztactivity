@@ -1,6 +1,7 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { useApp } from '../../state/app.context';
-import { initialState, reducer } from '../../state/parasztactivity/parasztactivity.context';
+import { initialState, ParasztActivityContext, reducer } from '../../state/parasztactivity/parasztactivity.context';
+import { useSingletonParasztactivityHandler } from '../../state/parasztactivity/parasztactivity.handler';
 import Chat from '../chat/Chat';
 import Guesser from './Guesser';
 import Hat from './Hat';
@@ -13,6 +14,14 @@ import Status from './Status';
 function Parasztactivity(): JSX.Element {
   const { state: appState } = useApp();
   const [state] = useReducer(reducer, initialState);
+
+  const handler = useSingletonParasztactivityHandler(appState.room?.id);
+
+  useEffect(() => {
+    console.log('Init effect called');
+    handler.init();
+    handler.getState();
+  }, [appState.room?.id, handler]);
 
   const gameContent = state.gameStarted ? (
     state.currentPlayer === appState.profile?.id ? (
@@ -27,22 +36,24 @@ function Parasztactivity(): JSX.Element {
   );
 
   return (
-    <div className="wrapper parasztactivityContainer">
-      <div className="game">
-        <div>{gameContent}</div>
-        <div className="statusOverlay">
-          <Status></Status>
+    <ParasztActivityContext.Provider value={initialState}>
+      <div className="wrapper parasztactivityContainer">
+        <div className="game">
+          <div>{gameContent}</div>
+          <div className="statusOverlay">
+            <Status></Status>
+          </div>
+        </div>
+        <div className="social">
+          <div className="chat">
+            <Chat></Chat>
+          </div>
+          <div className="leaderboard">
+            <Leaderboard></Leaderboard>
+          </div>
         </div>
       </div>
-      <div className="social">
-        <div className="chat">
-          <Chat></Chat>
-        </div>
-        <div className="leaderboard">
-          <Leaderboard></Leaderboard>
-        </div>
-      </div>
-    </div>
+    </ParasztActivityContext.Provider>
   );
 }
 

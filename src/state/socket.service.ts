@@ -1,14 +1,18 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { ChatMessage, Room, Player, UserError } from '../interfaces';
 import {
-  connectRoom,
   listRoomsReply,
   chatMessageReceived,
   joinRoomReply,
   onError,
   profileReceived,
   updateRoom,
+  connect,
+  disconnect,
+  handshakeReply,
 } from './actions';
+import { useApp } from './app.context';
+import { useSocket } from './socket';
 
 export type SocketHandler = {
   socket: SocketIOClient.Socket;
@@ -21,17 +25,25 @@ export type SocketHandler = {
   sendChatMessage: (payload: { roomName: string; chatMessage: ChatMessage }) => void;
 };
 
-export const socketHandlerFactory = (
-  socket: SocketIOClient.Socket,
-  dispatch: React.Dispatch<AnyAction>,
-): SocketHandler => {
+export const registerHandler = (socket: SocketIOClient.Socket, dispatch: React.Dispatch<AnyAction>): void => {
   socket.on('connect', () => {
     console.log('Connected!');
-    dispatch(connectRoom());
+    dispatch(connect());
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnected!', socket.id);
+    dispatch(disconnect());
   });
 
   socket.on('error', (response: UserError) => {
     dispatch(onError(response));
+  });
+
+  socket.on('handshakeReply', (response: { token: string }) => {
+    console.log('handshakeReply!', response);
+    sessionStorage.setItem('token', response.token);
+    dispatch(handshakeReply(response));
   });
 
   socket.on('joinChannelReply', (response: { room: Room }) => {
@@ -55,34 +67,38 @@ export const socketHandlerFactory = (
     console.log('message received', chatMessage, socket.id);
     dispatch(chatMessageReceived(chatMessage));
   });
+};
 
+export const useLobbyEmitter = (): SocketHandler => {
+  const socket = useSocket();
+  const { state } = useApp();
   return {
     socket,
     joinRoom: (payload: { name: string; roomName: string }) => {
-      socket.emit('joinRoom', payload);
+      socket.emit('joinRoom', { ...payload, token: state.token });
     },
     leaveRoom: (payload: { roomName: string }) => {
-      socket.emit('leaveRoom', { roomName: payload.roomName });
+      socket.emit('leaveRoom', { roomName: payload.roomName, token: state.token });
     },
 
     createRoom: (payload: { roomName: string }) => {
-      socket.emit('createRoom', payload.roomName);
+      socket.emit('createRoom', { roomName: payload.roomName, token: state.token });
     },
 
     setProfile: (payload: { name: string }) => {
-      socket.emit('setProfile', { name: payload.name });
+      socket.emit('setProfile', { name: payload.name, token: state.token });
     },
 
     getProfile: () => {
-      socket.emit('getProfile');
+      socket.emit('getProfile', { token: state.token });
     },
 
     sendChatMessage: (payload) => {
-      socket.emit('chatMessage', payload);
+      socket.emit('chatMessage', { ...payload, token: state.token });
     },
 
     listRooms: () => {
-      socket.emit('listRooms');
+      socket.emit('listRooms', { token: state.token });
     },
   };
 };

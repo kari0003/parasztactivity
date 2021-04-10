@@ -21,6 +21,7 @@ export type AppConnection = {
 };
 
 export interface AppState {
+  token: string | null;
   openForm: 'createRoom' | 'joinRoom' | null;
   name: string;
   profile: Player | undefined;
@@ -39,6 +40,7 @@ export interface State {
 }
 
 export const initialAppState: AppState = {
+  token: null,
   openForm: null,
   name: 'Főnökúr',
   profile: undefined,
@@ -57,7 +59,6 @@ export const initialAppState: AppState = {
 
 export const reducer = createReducer(initialAppState, (builder) =>
   builder
-
     .addCase(openCreateRoom, (state) => {
       state.openForm = 'createRoom';
     })

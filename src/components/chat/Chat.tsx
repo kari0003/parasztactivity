@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useApp } from '../../state/app.context';
-import { useSocketHandler } from '../../state/socket';
+import { useLobbyEmitter } from '../../state/socket.service';
 import Message from './Message';
 import './Chat.css';
 
@@ -9,7 +9,7 @@ function Chat(): JSX.Element {
 
   const [formState, setState] = useState({ message: '' });
 
-  const socketHandler = useSocketHandler();
+  const socketHandler = useLobbyEmitter();
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...formState, [event.target.name]: event.target.value });
