@@ -4,8 +4,7 @@ import io from 'socket.io-client';
 import { registerParasztactivityHandler } from './parasztactivity/parasztactivity.handler';
 import { registerHandler } from './socket.service';
 
-const SOCKET_SERVER = 'http://localhost:3005';
-//const SOCKET_SERVER = 'https://parasztactivity.herokuapp.com';
+const SOCKET_SERVER = process.env.REACT_APP_SOCKET_SERVER || 'http://localhost:3005';
 
 export const SocketContext = createContext(
   (() => {
@@ -19,7 +18,7 @@ export const useSocket = (): SocketIOClient.Socket => useContext(SocketContext);
 export const useSocketEventHandler = (dispatch: Dispatch<AnyAction>): void => {
   const socket = useSocket();
   useEffect(() => {
-    console.log('register in progress for socket fixed?', socket.id);
+    console.log('connecting', SOCKET_SERVER);
     registerHandler(socket, dispatch);
     registerParasztactivityHandler(socket, dispatch);
   }, [dispatch, socket]);
