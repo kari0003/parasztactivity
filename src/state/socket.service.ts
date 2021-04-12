@@ -55,6 +55,7 @@ export const registerHandler = (socket: SocketIOClient.Socket, dispatch: React.D
   });
 
   socket.on('profileReply', (response: Player) => {
+    localStorage.setItem('name', response.name);
     dispatch(profileReceived(response));
   });
 

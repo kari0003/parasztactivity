@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from 'react';
-import { applyMiddleware } from 'redux';
 import './App.css';
 import CreateRoomForm from './components/CreateRoomForm';
 import Header from './components/Header';
@@ -12,7 +11,8 @@ import { useSocket, useSocketEventHandler } from './state/socket';
 
 function App(): JSX.Element {
   const existingToken = sessionStorage.getItem('token');
-  const [state, dispatch] = useReducer(reducer, { ...initialAppState, token: existingToken });
+  const existingName = localStorage.getItem('name') || 'Senki';
+  const [state, dispatch] = useReducer(reducer, { ...initialAppState, token: existingToken, name: existingName });
   useSocketEventHandler(dispatch);
 
   const socket = useSocket();
@@ -20,7 +20,7 @@ function App(): JSX.Element {
   useEffect(() => {
     console.log('handshaking', socket.id, state.token);
     socket.emit('handshake', { token: state.token });
-  }, [socket]);
+  }, [socket, state.token]);
 
   const initialState: State = {
     state,

@@ -11,6 +11,7 @@ import {
   openJoinRoom,
   updateRoom,
   profileReceived,
+  handshakeReply,
 } from './actions';
 import { ConnectionStatus } from './connection';
 
@@ -22,6 +23,7 @@ export type AppConnection = {
 
 export interface AppState {
   token: string | null;
+  handshakeDone: boolean;
   openForm: 'createRoom' | 'joinRoom' | null;
   name: string;
   profile: Player | undefined;
@@ -41,6 +43,7 @@ export interface State {
 
 export const initialAppState: AppState = {
   token: null,
+  handshakeDone: false,
   openForm: null,
   name: 'Főnökúr',
   profile: undefined,
@@ -90,6 +93,10 @@ export const reducer = createReducer(initialAppState, (builder) =>
     .addCase(onError, (state, { payload }) => {
       state.connection.error = payload.errorCode;
       state.connection.message = payload.errorMessage;
+    })
+    .addCase(handshakeReply, (state, { payload }) => {
+      state.token = payload.token;
+      state.handshakeDone = true;
     })
     .addDefaultCase((state) => state),
 );

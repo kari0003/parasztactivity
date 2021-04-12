@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useContext, useEffect } from 'react';
-import { AnyAction, applyMiddleware } from 'redux';
+import { AnyAction } from 'redux';
 import io from 'socket.io-client';
 import { registerParasztactivityHandler } from './parasztactivity/parasztactivity.handler';
 import { registerHandler } from './socket.service';
