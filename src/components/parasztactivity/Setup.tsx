@@ -1,10 +1,12 @@
 import { FormEvent, useState } from 'react';
+import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
 import { useSingletonParasztactivityHandler } from '../../state/parasztactivity/parasztactivity.handler';
 
 function Setup({ roomId }: { roomId: number }): JSX.Element {
   const [formState, setState] = useState({ word: '' });
 
   const parasztactivityHandler = useSingletonParasztactivityHandler(roomId);
+  const state = useParasztActivity();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     parasztactivityHandler.addWord(formState.word);
@@ -18,7 +20,7 @@ function Setup({ roomId }: { roomId: number }): JSX.Element {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1>Set Up</h1>
+        <h1>Set Up</h1> {state.hatWordCount}
         <div>
           <label>
             Add word to Hat:

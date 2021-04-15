@@ -28,6 +28,7 @@ export type PublicGameState = {
     turnLengthSeconds: number;
   };
   scores: { [playerId: string]: number };
+  hatWordCount: number;
 };
 
 export type AddWordPayload = {

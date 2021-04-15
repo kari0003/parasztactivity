@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import CreateRoomForm from './components/CreateRoomForm';
 import Header from './components/Header';
@@ -6,15 +6,15 @@ import JoinForm from './components/JoinForm';
 import Lobby from './components/Lobby';
 import RoomList from './components/RoomList';
 import StatusBar from './components/StatusBar';
-import { AppContext, initialAppState, reducer, State } from './state/app.context';
+import { handshakeHandlerFactory } from './socketio/handshakeHandler';
+import { useApp } from './state/app.context';
 import { useSocket, useSocketEventHandler } from './state/socket';
+import { registerHandlerFactory, useLobbyEmitter } from './state/socket.service';
+import { registerParasztactivityHandler } from './state/parasztactivity/parasztactivity.handler';
 
 function App(): JSX.Element {
-  const existingToken = sessionStorage.getItem('token');
-  const existingName = localStorage.getItem('name') || 'Senki';
-  const [state, dispatch] = useReducer(reducer, { ...initialAppState, token: existingToken, name: existingName });
-  useSocketEventHandler(dispatch);
-
+  const { state, dispatch } = useApp();
+  const registry = useSocketEventHandler(dispatch);
   const socket = useSocket();
 
   useEffect(() => {
@@ -22,13 +22,14 @@ function App(): JSX.Element {
     socket.emit('handshake', { token: state.token });
   }, [socket, state.token]);
 
-  const initialState: State = {
-    state,
-    dispatch,
-  };
+  const lobbyEmitter = useLobbyEmitter();
+
+  registry.register('lobby', registerHandlerFactory);
+  registry.register('handshake', handshakeHandlerFactory(lobbyEmitter));
+  registry.register('parasztactivity', registerParasztactivityHandler);
 
   return (
-    <AppContext.Provider value={initialState}>
+    <>
       <StatusBar></StatusBar>
       <div className="background container">
         <Header></Header>
@@ -47,7 +48,7 @@ function App(): JSX.Element {
           )}
         </div>
       </div>
-    </AppContext.Provider>
+    </>
   );
 }
 

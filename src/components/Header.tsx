@@ -1,21 +1,14 @@
-import { useEffect } from 'react';
 import { openJoinRoom, openCreateRoom, leaveRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
 import { useLobbyEmitter } from '../state/socket.service';
 
 function Header(): JSX.Element {
   const {
-    state: { profile, room, connected, handshakeDone, name },
+    state: { profile, room, connected },
     dispatch,
   } = useApp();
 
   const socketHandler = useLobbyEmitter();
-
-  useEffect(() => {
-    if (handshakeDone) {
-      socketHandler.setProfile({ name });
-    }
-  }, [handshakeDone, socketHandler, name]);
 
   const leaveRoomHandler = () => {
     socketHandler.leaveRoom({ roomName: room ? room.name : '' });

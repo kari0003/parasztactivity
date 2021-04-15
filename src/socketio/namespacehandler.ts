@@ -1,15 +1,25 @@
-import { Manager } from 'socket.io-client';
+import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
 
-type EventHandler = () => void;
-
-type NamespaceHandler = {
-  registerEventHandler: (event: string, handler: EventHandler) => void;
-  emit: (event: string, payload: any) => void;
+export type EventHandlerFactory = (socket: SocketIOClient.Socket, dispatch: Dispatch<AnyAction>) => void;
+export type EventHandlerRegistry = {
+  register: (name: string, eventHandlerFactory: EventHandlerFactory) => void;
 };
 
-export const namespaceHandlerFactory = (manager: SocketIOClient.Manager, namespace: string) => {
-  let socket: SocketIOClient.Socket;
-  // handle reconnect, etc
+export const createEventHandlerRegistry = (
+  socket: SocketIOClient.Socket,
+  dispatch: Dispatch<AnyAction>,
+): EventHandlerRegistry => {
+  const registry: Record<string, boolean> = {};
+  const register: (name: string, eventHandlerFactory: EventHandlerFactory) => void = (name, handlerFactory) => {
+    if (registry[name]) {
+      console.log('eventhandler with name', name, 'already added');
+      return;
+    }
+    handlerFactory(socket, dispatch);
+    registry[name] = true;
+  };
+  return {
+    register,
+  };
 };
-
-export const eventHandlerFactory = (dispatch: any) => {};

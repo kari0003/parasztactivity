@@ -16,6 +16,7 @@ export type ParasztActivityState = {
     turnLengthSeconds: number;
   };
   scores: { [playerId: string]: number };
+  hatWordCount: number;
 };
 
 export const initialState: ParasztActivityState = {
@@ -32,6 +33,7 @@ export const initialState: ParasztActivityState = {
     turnLengthSeconds: 30,
   },
   scores: {},
+  hatWordCount: 0,
 };
 
 export const reducer = createReducer(initialState, (builder) =>

@@ -12,7 +12,7 @@ function Leaderboard(): JSX.Element {
   const playerList = (room ? room.players : ([] as Player[])).map((player) => {
     const score = parasztactivityState.scores[player.id] || 0;
     return (
-      <li key={player.name}>
+      <li key={player.id}>
         {player.name} : {score}
       </li>
     );

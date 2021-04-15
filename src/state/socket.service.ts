@@ -1,5 +1,6 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { ChatMessage, Room, Player, UserError } from '../interfaces';
+import { EventHandlerFactory } from '../socketio/namespacehandler';
 import {
   listRoomsReply,
   chatMessageReceived,
@@ -14,7 +15,7 @@ import {
 import { useApp } from './app.context';
 import { useSocket } from './socket';
 
-export type SocketHandler = {
+export type LobbyEmitter = {
   socket: SocketIOClient.Socket;
   listRooms: () => void;
   createRoom: (payload: { roomName: string }) => void;
@@ -25,7 +26,10 @@ export type SocketHandler = {
   sendChatMessage: (payload: { roomName: string; chatMessage: ChatMessage }) => void;
 };
 
-export const registerHandler = (socket: SocketIOClient.Socket, dispatch: React.Dispatch<AnyAction>): void => {
+export const registerHandlerFactory: EventHandlerFactory = (
+  socket: SocketIOClient.Socket,
+  dispatch: React.Dispatch<AnyAction>,
+): void => {
   socket.on('connect', () => {
     console.log('Connected!');
     dispatch(connect());
@@ -70,12 +74,13 @@ export const registerHandler = (socket: SocketIOClient.Socket, dispatch: React.D
   });
 };
 
-export const useLobbyEmitter = (): SocketHandler => {
+export const useLobbyEmitter = (): LobbyEmitter => {
   const socket = useSocket();
   const { state } = useApp();
   return {
     socket,
     joinRoom: (payload: { name: string; roomName: string }) => {
+      console.log('join room');
       socket.emit('joinRoom', { ...payload, token: state.token });
     },
     leaveRoom: (payload: { roomName: string }) => {
