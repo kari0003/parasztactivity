@@ -12,7 +12,7 @@ import {
   disconnect,
   handshakeReply,
 } from './actions';
-import { useApp } from './app.context';
+import { AppState, useApp } from './app.context';
 import { useSocket } from './socket';
 
 export type LobbyEmitter = {
@@ -44,13 +44,8 @@ export const registerHandlerFactory: EventHandlerFactory = (
     dispatch(onError(response));
   });
 
-  socket.on('handshakeReply', (response: { token: string }) => {
-    console.log('handshakeReply!', response);
-    sessionStorage.setItem('token', response.token);
-    dispatch(handshakeReply(response));
-  });
-
   socket.on('joinChannelReply', (response: { room: Room }) => {
+    console.log('joined', response);
     dispatch(joinRoomReply(response));
   });
 
@@ -74,37 +69,41 @@ export const registerHandlerFactory: EventHandlerFactory = (
   });
 };
 
-export const useLobbyEmitter = (): LobbyEmitter => {
-  const socket = useSocket();
-  const { state } = useApp();
+export const lobbyEmitterFactory = (socket: SocketIOClient.Socket, token: string | null): LobbyEmitter => {
   return {
     socket,
     joinRoom: (payload: { name: string; roomName: string }) => {
-      console.log('join room');
-      socket.emit('joinRoom', { ...payload, token: state.token });
+      console.log('join room', payload);
+      socket.emit('joinRoom', { ...payload, token: token });
     },
     leaveRoom: (payload: { roomName: string }) => {
-      socket.emit('leaveRoom', { roomName: payload.roomName, token: state.token });
+      socket.emit('leaveRoom', { roomName: payload.roomName, token: token });
     },
 
     createRoom: (payload: { roomName: string }) => {
-      socket.emit('createRoom', { roomName: payload.roomName, token: state.token });
+      socket.emit('createRoom', { roomName: payload.roomName, token: token });
     },
 
     setProfile: (payload: { name: string }) => {
-      socket.emit('setProfile', { name: payload.name, token: state.token });
+      socket.emit('setProfile', { name: payload.name, token: token });
     },
 
     getProfile: () => {
-      socket.emit('getProfile', { token: state.token });
+      socket.emit('getProfile', { token: token });
     },
 
     sendChatMessage: (payload) => {
-      socket.emit('chatMessage', { ...payload, token: state.token });
+      socket.emit('chatMessage', { ...payload, token: token });
     },
 
     listRooms: () => {
-      socket.emit('listRooms', { token: state.token });
+      socket.emit('listRooms', { token: token });
     },
   };
+};
+
+export const useLobbyEmitter = (): LobbyEmitter => {
+  const socket = useSocket();
+  const { state } = useApp();
+  return lobbyEmitterFactory(socket, state.token);
 };

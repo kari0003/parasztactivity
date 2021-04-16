@@ -15,6 +15,7 @@ export const registerParasztactivityHandler = (
   dispatch: React.Dispatch<AnyAction>,
 ): void => {
   socket.on('gameState', (payload: { gameState: PublicGameState }) => {
+    console.log('received gameState', payload);
     dispatch(ParasztactivityActions.gameState(payload.gameState));
   });
 };
@@ -23,6 +24,7 @@ export const parasztactivityHandlerFactory = (
   socket: SocketIOClient.Socket,
   roomId: number | undefined,
 ): ParasztactivityHandler => {
+  console.log('roomId', roomId);
   const getState = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');

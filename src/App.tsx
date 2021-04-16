@@ -13,20 +13,15 @@ import { registerHandlerFactory, useLobbyEmitter } from './state/socket.service'
 import { registerParasztactivityHandler } from './state/parasztactivity/parasztactivity.handler';
 
 function App(): JSX.Element {
-  const { state, dispatch } = useApp();
-  const registry = useSocketEventHandler(dispatch);
+  const { state } = useApp();
   const socket = useSocket();
 
   useEffect(() => {
-    console.log('handshaking', socket.id, state.token);
-    socket.emit('handshake', { token: state.token });
+    if (socket) {
+      console.log('handshaking', socket.id, state.token);
+      socket.emit('handshake', { token: state.token });
+    }
   }, [socket, state.token]);
-
-  const lobbyEmitter = useLobbyEmitter();
-
-  registry.register('lobby', registerHandlerFactory);
-  registry.register('handshake', handshakeHandlerFactory(lobbyEmitter));
-  registry.register('parasztactivity', registerParasztactivityHandler);
 
   return (
     <>

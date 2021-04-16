@@ -39,6 +39,7 @@ export const initialState: ParasztActivityState = {
 export const reducer = createReducer(initialState, (builder) =>
   builder.addCase(ParasztactivityActions.gameState, (state, { payload }) => {
     state = { ...state, ...payload };
+    console.log('state');
   }),
 );
 

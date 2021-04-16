@@ -13,7 +13,7 @@ import Status from './Status';
 
 function Parasztactivity(): JSX.Element {
   const { state: appState } = useApp();
-  const [state] = useReducer(reducer, initialState);
+  const [state] = useReducer(reducer, { ...initialState, roomId: appState.room?.id || -1 });
 
   const handler = useSingletonParasztactivityHandler(appState.room?.id);
 
