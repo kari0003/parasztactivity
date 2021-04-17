@@ -10,9 +10,9 @@ import {
   updateRoom,
   connect,
   disconnect,
-  handshakeReply,
 } from './actions';
-import { AppState, useApp } from './app.context';
+import { useApp } from './app.context';
+import { parasztactivityHandlerFactory } from './parasztactivity/parasztactivity.handler';
 import { useSocket } from './socket';
 
 export type LobbyEmitter = {
@@ -26,17 +26,16 @@ export type LobbyEmitter = {
   sendChatMessage: (payload: { roomName: string; chatMessage: ChatMessage }) => void;
 };
 
-export const registerHandlerFactory: EventHandlerFactory = (
+export const registerHandlerFactory = (dispatch: React.Dispatch<AnyAction>): EventHandlerFactory => (
   socket: SocketIOClient.Socket,
-  dispatch: React.Dispatch<AnyAction>,
 ): void => {
   socket.on('connect', () => {
-    console.log('Connected!');
+    console.log('Connected!', socket.id);
     dispatch(connect());
   });
 
   socket.on('disconnect', () => {
-    console.log('disconnected!', socket.id);
+    console.log('Disconnected!', socket.id);
     dispatch(disconnect());
   });
 
@@ -46,7 +45,13 @@ export const registerHandlerFactory: EventHandlerFactory = (
 
   socket.on('joinChannelReply', (response: { room: Room }) => {
     console.log('joined', response);
+    parasztactivityHandlerFactory(socket).getState(response.room.id);
     dispatch(joinRoomReply(response));
+  });
+
+  socket.on('createRoomReply', (response: { room: Room }) => {
+    console.log('created', response);
+    parasztactivityHandlerFactory(socket).init(response.room.id);
   });
 
   socket.on('listRoomsReply', (response: Room[]) => {

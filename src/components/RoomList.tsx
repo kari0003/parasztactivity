@@ -9,7 +9,6 @@ function RoomList(): JSX.Element {
   const socketHandler = useLobbyEmitter();
 
   const listRoomsHandler = () => {
-    console.log('listing Rooms');
     socketHandler.listRooms();
   };
 

@@ -1,15 +1,19 @@
 import { FormEvent, useState } from 'react';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
-import { useSingletonParasztactivityHandler } from '../../state/parasztactivity/parasztactivity.handler';
+import { useApp } from '../../state/app.context';
+import { parasztactivityHandlerFactory } from '../../state/parasztactivity/parasztactivity.handler';
+import { useSocket } from '../../state/socket';
 
-function Setup({ roomId }: { roomId: number }): JSX.Element {
+function Setup(): JSX.Element {
+  const {
+    state: { game },
+  } = useApp();
   const [formState, setState] = useState({ word: '' });
+  const socket = useSocket();
 
-  const parasztactivityHandler = useSingletonParasztactivityHandler(roomId);
-  const state = useParasztActivity();
+  const handler = parasztactivityHandlerFactory(socket);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    parasztactivityHandler.addWord(formState.word);
+    handler.addWord(formState.word, game.roomId);
     event.preventDefault();
   };
 
@@ -20,7 +24,7 @@ function Setup({ roomId }: { roomId: number }): JSX.Element {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h1>Set Up</h1> {state.hatWordCount}
+        <h1>Set Up</h1>
         <div>
           <label>
             Add word to Hat:
@@ -29,7 +33,7 @@ function Setup({ roomId }: { roomId: number }): JSX.Element {
         </div>
         <input type="submit" value="Add" />
       </form>
-
+      Words in the hat: {game.hatWordCount}
       <button>Ready</button>
     </div>
   );

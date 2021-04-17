@@ -14,6 +14,8 @@ import {
   handshakeReply,
 } from './actions';
 import { ConnectionStatus } from './connection';
+import { ParasztactivityActions } from './parasztactivity/parasztactivity.actions';
+import { initialState, ParasztactivityState } from './parasztactivity/parasztactivity.context';
 
 export type AppConnection = {
   status: ConnectionStatus;
@@ -34,6 +36,7 @@ export interface AppState {
     messages: ChatMessage[];
   };
   connection: AppConnection;
+  game: ParasztactivityState;
 }
 
 export interface State {
@@ -58,6 +61,7 @@ export const initialAppState: AppState = {
     error: null,
     message: null,
   },
+  game: initialState,
 };
 
 export const reducer = createReducer(initialAppState, (builder) =>
@@ -71,11 +75,13 @@ export const reducer = createReducer(initialAppState, (builder) =>
     .addCase(joinRoomReply, (state, action) => {
       state.room = action.payload.room;
       state.chat.messages = action.payload.room.messages;
+      state.game.roomId = action.payload.room.id;
       state.connected = true;
       state.openForm = null;
     })
     .addCase(updateRoom, (state, action) => {
       state.room = action.payload.room;
+      state.game.roomId = action.payload.room.id;
     })
     .addCase(leaveRoom, (state) => {
       state.connected = false;
@@ -97,6 +103,9 @@ export const reducer = createReducer(initialAppState, (builder) =>
     .addCase(handshakeReply, (state, { payload }) => {
       state.token = payload.token;
       state.handshakeDone = true;
+    })
+    .addCase(ParasztactivityActions.gameState, (state, { payload }) => {
+      state.game = { ...state.game, ...payload };
     })
     .addDefaultCase((state) => state),
 );

@@ -1,10 +1,6 @@
-import { createContext, Dispatch, useContext, useEffect } from 'react';
-import { AnyAction } from 'redux';
+import { createContext, useContext } from 'react';
 import io from 'socket.io-client';
-import { handshakeHandlerFactory } from '../socketio/handshakeHandler';
 import { createEventHandlerRegistry, EventHandlerRegistry } from '../socketio/namespacehandler';
-import { registerParasztactivityHandler } from './parasztactivity/parasztactivity.handler';
-import { registerHandlerFactory, useLobbyEmitter } from './socket.service';
 
 const SOCKET_SERVER = process.env.REACT_APP_SOCKET_SERVER || 'http://localhost:3005';
 
@@ -17,8 +13,8 @@ export const SocketContext = createContext(
 
 export const useSocket = (): SocketIOClient.Socket => useContext(SocketContext);
 
-export const useSocketEventHandler = (dispatch: Dispatch<AnyAction>): EventHandlerRegistry => {
+export const useSocketEventHandler = (): EventHandlerRegistry => {
   const socket = useSocket();
-  const registry = createEventHandlerRegistry(socket, dispatch);
+  const registry = createEventHandlerRegistry(socket);
   return registry;
 };

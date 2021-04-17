@@ -1,8 +1,6 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { createContext, useContext } from 'react';
-import { ParasztactivityActions } from './parasztactivity.actions';
+import { useApp } from '../app.context';
 
-export type ParasztActivityState = {
+export type ParasztactivityState = {
   roomId: number;
   gameStarted: boolean;
   roundOver: boolean;
@@ -19,7 +17,7 @@ export type ParasztActivityState = {
   hatWordCount: number;
 };
 
-export const initialState: ParasztActivityState = {
+export const initialState: ParasztactivityState = {
   roomId: -1,
   gameStarted: false,
   roundOver: false,
@@ -36,13 +34,7 @@ export const initialState: ParasztActivityState = {
   hatWordCount: 0,
 };
 
-export const reducer = createReducer(initialState, (builder) =>
-  builder.addCase(ParasztactivityActions.gameState, (state, { payload }) => {
-    state = { ...state, ...payload };
-    console.log('state');
-  }),
-);
-
-export const ParasztActivityContext = createContext(initialState);
-
-export const useParasztActivity = (): ParasztActivityState => useContext(ParasztActivityContext);
+export const useParasztActivity = (): ParasztactivityState => {
+  const { state } = useApp();
+  return state.game;
+};
