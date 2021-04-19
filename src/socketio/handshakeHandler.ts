@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { handshakeReply } from '../state/actions';
-import { LobbyEmitter } from '../state/socket.service';
+import { LobbyEmitter } from './socket.service';
 import { EventHandlerFactory } from './namespacehandler';
 
 export const handshakeHandlerFactory = (

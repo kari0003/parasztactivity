@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useApp } from '../../state/app.context';
-import { parasztactivityHandlerFactory } from '../../state/parasztactivity/parasztactivity.handler';
+import { parasztactivityHandlerFactory } from '../../socketio/parasztactivity.handler';
 import { useSocket } from '../../state/socket';
 
 function Setup(): JSX.Element {
@@ -21,6 +21,10 @@ function Setup(): JSX.Element {
     setState({ ...formState, [event.target.name]: event.target.value });
   };
 
+  const handleReady = () => {
+    handler.startTurn(Object.keys(game.scores)[0], game.roomId);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -34,7 +38,7 @@ function Setup(): JSX.Element {
         <input type="submit" value="Add" />
       </form>
       Words in the hat: {game.hatWordCount}
-      <button>Ready</button>
+      <button onClick={handleReady}>Ready</button>
     </div>
   );
 }

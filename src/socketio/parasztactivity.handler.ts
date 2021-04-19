@@ -1,13 +1,19 @@
 import { AnyAction } from 'redux';
-import { AddWordPayload, ParasztactivityEvent, PublicGameState } from './parasztactivity.interfaces';
-import { ParasztactivityActions } from './parasztactivity.actions';
-import { EventHandlerFactory } from '../../socketio/namespacehandler';
+import {
+  AddWordPayload,
+  ParasztactivityEvent,
+  PublicGameState,
+  StartTurnPayload,
+} from '../state/parasztactivity/parasztactivity.interfaces';
+import { ParasztactivityActions } from '../state/parasztactivity/parasztactivity.actions';
+import { EventHandlerFactory } from './namespacehandler';
 import { Dispatch } from 'react';
 
 export type ParasztactivityHandler = {
   getState: (roomId: number) => void;
   init: (roomId: number) => void;
   addWord: (word: string, roomId: number) => void;
+  startTurn: (playerId: string, roomId: number) => void;
 };
 
 export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): EventHandlerFactory => (
@@ -55,9 +61,21 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     });
   };
 
+  const startTurn = (playerId: string, roomId: number): void => {
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'startTurn',
+        roomId,
+        payload: { playerId } as StartTurnPayload,
+      } as ParasztactivityEvent,
+    });
+  };
+
   return {
     getState,
     init,
     addWord,
+    startTurn,
   };
 };

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useLobbyEmitter } from '../state/socket.service';
+import { useLobbyEmitter } from '../socketio/socket.service';
 
 function CreateRoomForm(): JSX.Element {
   const [formState, setState] = useState({ name: 'Vendégszoba' });

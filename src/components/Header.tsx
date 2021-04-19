@@ -1,6 +1,6 @@
 import { openJoinRoom, openCreateRoom, leaveRoom } from '../state/actions';
 import { useApp } from '../state/app.context';
-import { useLobbyEmitter } from '../state/socket.service';
+import { useLobbyEmitter } from '../socketio/socket.service';
 
 function Header(): JSX.Element {
   const {

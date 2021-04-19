@@ -1,6 +1,6 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { ChatMessage, Room, Player, UserError } from '../interfaces';
-import { EventHandlerFactory } from '../socketio/namespacehandler';
+import { EventHandlerFactory } from './namespacehandler';
 import {
   listRoomsReply,
   chatMessageReceived,
@@ -10,10 +10,10 @@ import {
   updateRoom,
   connect,
   disconnect,
-} from './actions';
-import { useApp } from './app.context';
-import { parasztactivityHandlerFactory } from './parasztactivity/parasztactivity.handler';
-import { useSocket } from './socket';
+} from '../state/actions';
+import { useApp } from '../state/app.context';
+import { parasztactivityHandlerFactory } from './parasztactivity.handler';
+import { useSocket } from '../state/socket';
 
 export type LobbyEmitter = {
   socket: SocketIOClient.Socket;

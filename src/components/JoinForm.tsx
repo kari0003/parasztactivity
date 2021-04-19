@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useApp } from '../state/app.context';
-import { useLobbyEmitter } from '../state/socket.service';
+import { useLobbyEmitter } from '../socketio/socket.service';
 
 function JoinForm(): JSX.Element {
   const {

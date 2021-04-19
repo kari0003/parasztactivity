@@ -2,9 +2,9 @@ import React, { useEffect, useReducer } from 'react';
 import './App.css';
 import { handshakeHandlerFactory } from './socketio/handshakeHandler';
 import { AppContext, initialAppState, reducer, State } from './state/app.context';
-import { registerParasztactivityHandler } from './state/parasztactivity/parasztactivity.handler';
+import { registerParasztactivityHandler } from './socketio/parasztactivity.handler';
 import { useSocket, useSocketEventHandler } from './state/socket';
-import { lobbyEmitterFactory, registerHandlerFactory } from './state/socket.service';
+import { lobbyEmitterFactory, registerHandlerFactory } from './socketio/socket.service';
 
 function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
   const existingToken = sessionStorage.getItem('token');
