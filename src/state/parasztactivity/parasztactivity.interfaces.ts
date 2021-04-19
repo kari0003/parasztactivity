@@ -1,6 +1,15 @@
 import { GameEvent } from '../../interfaces';
 
-export type EventTypes = 'addWord' | 'drawWord' | 'putBackWord' | 'guessWord' | 'resetGame' | 'endTurn' | 'startTurn';
+export type EventTypes =
+  | 'addWord'
+  | 'drawWord'
+  | 'putBackWord'
+  | 'guessWord'
+  | 'resetGame'
+  | 'endTurn'
+  | 'startTurn'
+  | 'startRound'
+  | 'startGame';
 
 export type Payloads =
   | AddWordPayload
@@ -9,7 +18,9 @@ export type Payloads =
   | PutBackWordPayload
   | GuessWordPayload
   | EndTurnPayload
-  | StartTurnPayload;
+  | StartTurnPayload
+  | StartRoundPayload
+  | StartGamePayload;
 
 export interface ParasztactivityEvent extends GameEvent {
   game: 'parasztactivity';
@@ -49,6 +60,8 @@ export type GuessWordPayload = {
 
 export type EndTurnPayload = {};
 
-export type StartTurnPayload = {
-  playerId: string;
-};
+export type StartTurnPayload = {};
+
+export type StartGamePayload = {};
+
+export type StartRoundPayload = {};

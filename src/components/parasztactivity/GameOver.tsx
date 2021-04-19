@@ -3,7 +3,7 @@ import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.
 import { useSocket } from '../../state/socket';
 import Leaderboard from './Leaderboard';
 
-function RoundOver(): JSX.Element {
+function GameOver(): JSX.Element {
   const state = useParasztActivity();
   const socket = useSocket();
 
@@ -27,4 +27,4 @@ function RoundOver(): JSX.Element {
   );
 }
 
-export default RoundOver;
+export default GameOver;

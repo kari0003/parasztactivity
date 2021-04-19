@@ -1,5 +1,6 @@
 import { useApp } from '../../state/app.context';
 import Chat from '../chat/Chat';
+import GameOver from './GameOver';
 import Guesser from './Guesser';
 import Hat from './Hat';
 import Leaderboard from './Leaderboard';
@@ -7,21 +8,32 @@ import './Parasztactivity.css';
 import RoundOver from './RoundOver';
 import Setup from './Setup';
 import Status from './Status';
+import TurnOver from './TurnOver';
 
 function Parasztactivity(): JSX.Element {
   const { state } = useApp();
   const gameState = state.game;
 
-  const gameContent = gameState.gameStarted ? (
-    gameState.currentPlayer === state.profile?.id ? (
-      <Hat></Hat>
+  const gameContent = !gameState.gameOver ? (
+    gameState.isGameStarted ? (
+      gameState.isRoundInProgress ? (
+        gameState.isTurnInProgress ? (
+          gameState.currentPlayer === state.profile?.id ? (
+            <Hat></Hat>
+          ) : (
+            <Guesser></Guesser>
+          )
+        ) : (
+          <TurnOver></TurnOver>
+        )
+      ) : (
+        <RoundOver></RoundOver>
+      )
     ) : (
-      <Guesser></Guesser>
+      <Setup></Setup>
     )
-  ) : gameState.roundOver ? (
-    <RoundOver></RoundOver>
   ) : (
-    <Setup></Setup>
+    <GameOver></GameOver>
   );
 
   return (

@@ -2,12 +2,13 @@ import { useApp } from '../app.context';
 
 export type ParasztactivityState = {
   roomId: number;
-  gameStarted: boolean;
-  roundOver: boolean;
   gameOver: boolean;
   currentPlayer: string | null;
   currentWord: string | null;
   currentTurnStart: number | null;
+  isGameStarted: boolean;
+  isTurnInProgress: boolean;
+  isRoundInProgress: boolean;
   settings: {
     minWordPerPlayer: number;
     maxWordPerPlayer: number;
@@ -19,12 +20,13 @@ export type ParasztactivityState = {
 
 export const initialState: ParasztactivityState = {
   roomId: -1,
-  gameStarted: false,
-  roundOver: false,
   gameOver: false,
   currentPlayer: null,
   currentWord: null,
   currentTurnStart: null,
+  isGameStarted: false,
+  isTurnInProgress: false,
+  isRoundInProgress: false,
   settings: {
     minWordPerPlayer: 0,
     maxWordPerPlayer: 3,

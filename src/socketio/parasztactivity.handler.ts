@@ -3,6 +3,8 @@ import {
   AddWordPayload,
   ParasztactivityEvent,
   PublicGameState,
+  StartGamePayload,
+  StartRoundPayload,
   StartTurnPayload,
 } from '../state/parasztactivity/parasztactivity.interfaces';
 import { ParasztactivityActions } from '../state/parasztactivity/parasztactivity.actions';
@@ -13,7 +15,9 @@ export type ParasztactivityHandler = {
   getState: (roomId: number) => void;
   init: (roomId: number) => void;
   addWord: (word: string, roomId: number) => void;
-  startTurn: (playerId: string, roomId: number) => void;
+  startTurn: (roomId: number) => void;
+  startRound: (roomId: number) => void;
+  startGame: (roomId: number) => void;
 };
 
 export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): EventHandlerFactory => (
@@ -61,13 +65,33 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     });
   };
 
-  const startTurn = (playerId: string, roomId: number): void => {
+  const startGame = (roomId: number): void => {
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'startGame',
+        roomId,
+        payload: {},
+      } as ParasztactivityEvent,
+    });
+  };
+  const startRound = (roomId: number): void => {
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'startRound',
+        roomId,
+        payload: {},
+      } as ParasztactivityEvent,
+    });
+  };
+  const startTurn = (roomId: number): void => {
     socket.emit('gameEvent', {
       gameEvent: {
         game: 'parasztactivity',
         eventType: 'startTurn',
         roomId,
-        payload: { playerId } as StartTurnPayload,
+        payload: {},
       } as ParasztactivityEvent,
     });
   };
@@ -77,5 +101,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     init,
     addWord,
     startTurn,
+    startRound,
+    startGame,
   };
 };

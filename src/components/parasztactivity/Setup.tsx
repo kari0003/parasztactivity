@@ -21,8 +21,8 @@ function Setup(): JSX.Element {
     setState({ ...formState, [event.target.name]: event.target.value });
   };
 
-  const handleReady = () => {
-    handler.startTurn(Object.keys(game.scores)[0], game.roomId);
+  const handleStartGame = () => {
+    handler.startGame(game.roomId);
   };
 
   return (
@@ -38,7 +38,7 @@ function Setup(): JSX.Element {
         <input type="submit" value="Add" />
       </form>
       Words in the hat: {game.hatWordCount}
-      <button onClick={handleReady}>Ready</button>
+      {!game.isGameStarted ? <button onClick={handleStartGame}>Start Game</button> : <></>}
     </div>
   );
 }
