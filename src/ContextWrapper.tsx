@@ -25,7 +25,7 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
     registry.register('handshake', handshakeHandlerFactory(lobbyEmitterFactory(socket, state.token), dispatch));
     registry.register('parasztactivity', registerParasztactivityHandler(dispatch));
     console.log('register effect has run for', socket.id);
-  }, []); // TODO socket context
+  }, [socket]);
 
   const initialState: State = {
     state,
