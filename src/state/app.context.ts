@@ -107,6 +107,12 @@ export const reducer = createReducer(initialAppState, (builder) =>
     .addCase(ParasztactivityActions.gameState, (state, { payload }) => {
       state.game = { ...state.game, ...payload };
     })
+    .addCase(ParasztactivityActions.drawWord, (state, { payload }) => {
+      state.game.currentWord = payload;
+    })
+    .addCase(ParasztactivityActions.putBackWord, (state) => {
+      state.game.currentWord = null;
+    })
     .addDefaultCase((state) => state),
 );
 

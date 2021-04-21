@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import './App.css';
-import { handshakeHandlerFactory } from './socketio/handshakeHandler';
+import { handshakeHandlerFactory, handshakeEmitterFactory } from './socketio/handshakeHandler';
 import { AppContext, initialAppState, reducer, State } from './state/app.context';
 import { registerParasztactivityHandler } from './socketio/parasztactivity.handler';
 import { useSocket, useSocketEventHandler } from './state/socket';
@@ -22,7 +22,14 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
 
   useEffect(() => {
     registry.register('lobby', registerHandlerFactory(dispatch));
-    registry.register('handshake', handshakeHandlerFactory(lobbyEmitterFactory(socket, state.token), dispatch));
+    registry.register(
+      'handshake',
+      handshakeHandlerFactory(
+        lobbyEmitterFactory(socket, state.token),
+        handshakeEmitterFactory(socket, state.token),
+        dispatch,
+      ),
+    );
     registry.register('parasztactivity', registerParasztactivityHandler(dispatch));
     console.log('register effect has run for', socket.id);
   }, [socket]);

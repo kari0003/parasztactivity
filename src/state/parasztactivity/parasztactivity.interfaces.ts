@@ -40,6 +40,7 @@ export type PublicGameState = {
   };
   scores: { [playerId: string]: number };
   hatWordCount: number;
+  roundRobinIndex: number;
 };
 
 export type AddWordPayload = {

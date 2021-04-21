@@ -18,6 +18,8 @@ export type ParasztactivityHandler = {
   startTurn: (roomId: number) => void;
   startRound: (roomId: number) => void;
   startGame: (roomId: number) => void;
+  drawWord: (roomId: number) => void;
+  putBackWord: (roomId: number) => void;
 };
 
 export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): EventHandlerFactory => (
@@ -26,6 +28,15 @@ export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): E
   socket.on('gameState', (payload: { gameState: PublicGameState }) => {
     console.log('received gameState', payload);
     dispatch(ParasztactivityActions.gameState(payload.gameState));
+  });
+
+  socket.on('drawWordReply', (payload: { word: string }) => {
+    console.log('drawnWord', payload);
+    dispatch(ParasztactivityActions.drawWord(payload.word));
+  });
+  socket.on('putBackWordReply', (payload: { word: null }) => {
+    console.log('putBackWord', payload);
+    dispatch(ParasztactivityActions.putBackWord());
   });
 };
 
@@ -96,6 +107,28 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     });
   };
 
+  const drawWord = (roomId: number): void => {
+    console.log('drawing word');
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'drawWord',
+        roomId,
+        payload: {},
+      },
+    });
+  };
+  const putBackWord = (roomId: number): void => {
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'putBackWord',
+        roomId,
+        payload: {},
+      },
+    });
+  };
+
   return {
     getState,
     init,
@@ -103,5 +136,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     startTurn,
     startRound,
     startGame,
+    drawWord,
+    putBackWord,
   };
 };

@@ -29,16 +29,6 @@ export type LobbyEmitter = {
 export const registerHandlerFactory = (dispatch: React.Dispatch<AnyAction>): EventHandlerFactory => (
   socket: SocketIOClient.Socket,
 ): void => {
-  socket.on('connect', () => {
-    console.log('Connected!', socket.id);
-    dispatch(connect());
-  });
-
-  socket.on('disconnect', () => {
-    console.log('Disconnected!', socket.id);
-    dispatch(disconnect());
-  });
-
   socket.on('error', (response: UserError) => {
     dispatch(onError(response));
   });

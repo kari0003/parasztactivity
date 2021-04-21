@@ -3,7 +3,7 @@ import Timer from './Timer';
 
 function Guesser(): JSX.Element {
   const state = useParasztActivity();
-  const currentWord = state.currentWord || 'Állapotmentes';
+  const currentWord = '*********';
 
   return (
     <div>
