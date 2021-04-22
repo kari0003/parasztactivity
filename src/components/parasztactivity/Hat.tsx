@@ -1,22 +1,19 @@
-import { parasztactivityHandlerFactory } from '../../socketio/parasztactivity.handler';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
-import { useSocket } from '../../state/socket';
+import { useParasztactivityEmitter } from '../../socketio/parasztactivity.handler';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 import Timer from './Timer';
 
 function Hat(): JSX.Element {
-  const state = useParasztActivity();
+  const state = useParasztactivity();
   const currentWord = state.currentWord || 'Állapotmentes';
 
-  const socket = useSocket();
-
-  const handler = parasztactivityHandlerFactory(socket);
+  const handler = useParasztactivityEmitter();
 
   const handleDraw = () => {
-    handler.drawWord(state.roomId);
+    handler.drawWord();
   };
 
   const handleReturn = () => {
-    handler.putBackWord(state.roomId);
+    handler.putBackWord();
   };
 
   return (

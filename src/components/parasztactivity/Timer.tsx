@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 
 function Timer(): JSX.Element {
-  const { currentTurnStart, settings } = useParasztActivity();
+  const { currentTurnStart, settings } = useParasztactivity();
 
   const [seconds, setSeconds] = useState(0);
 

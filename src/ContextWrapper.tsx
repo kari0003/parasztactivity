@@ -14,13 +14,6 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
   const registry = useSocketEventHandler();
 
   useEffect(() => {
-    if (socket) {
-      console.log('handshaking', socket.id, state.token);
-      socket.emit('handshake', { token: state.token });
-    }
-  }, [socket, state.token]);
-
-  useEffect(() => {
     registry.register('lobby', registerHandlerFactory(dispatch));
     registry.register(
       'handshake',

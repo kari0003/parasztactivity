@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
-import { initialAppState, useApp } from '../../state/app.context';
-import { parasztactivityHandlerFactory } from '../../socketio/parasztactivity.handler';
-import { useSocket } from '../../state/socket';
+import { useApp } from '../../state/app.context';
+import { useParasztactivityEmitter } from '../../socketio/parasztactivity.handler';
 
 function Setup(): JSX.Element {
   const {
@@ -11,13 +10,12 @@ function Setup(): JSX.Element {
     return { ...state, [`word${index}`]: '' };
   }, {});
   const [formState, setState] = useState<Record<string, string>>(initialFormState);
-  const socket = useSocket();
 
-  const handler = parasztactivityHandlerFactory(socket);
+  const handler = useParasztactivityEmitter();
 
   const handleSubmitFactory = (index: number) => (event: FormEvent<HTMLFormElement>) => {
     console.log('formState', formState);
-    handler.addWord(formState[`word${index}`], game.roomId);
+    handler.addWord(formState[`word${index}`]);
     console.log('word with index added', index);
     event.preventDefault();
   };
@@ -27,7 +25,7 @@ function Setup(): JSX.Element {
   };
 
   const handleStartGame = () => {
-    handler.startGame(game.roomId);
+    handler.startGame();
   };
 
   const getAddWordForm = (index = 0) => {

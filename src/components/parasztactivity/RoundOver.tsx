@@ -1,16 +1,14 @@
-import { parasztactivityHandlerFactory } from '../../socketio/parasztactivity.handler';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
-import { useSocket } from '../../state/socket';
+import { useParasztactivityEmitter } from '../../socketio/parasztactivity.handler';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 import Leaderboard from './Leaderboard';
 
 function RoundOver(): JSX.Element {
-  const state = useParasztActivity();
-  const socket = useSocket();
+  const state = useParasztactivity();
 
-  const handler = parasztactivityHandlerFactory(socket);
+  const handler = useParasztactivityEmitter();
 
   const handleStartRound = () => {
-    handler.startRound(state.roomId);
+    handler.startRound();
   };
 
   return (

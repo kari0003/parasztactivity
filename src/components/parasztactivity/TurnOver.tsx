@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react';
-import { parasztactivityHandlerFactory } from '../../socketio/parasztactivity.handler';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
-import { useSocket } from '../../state/socket';
+import { useParasztactivityEmitter } from '../../socketio/parasztactivity.handler';
 
 function TurnOver(): JSX.Element {
-  const state = useParasztActivity();
-  const socket = useSocket();
-
   const [countdownState, setCountdown] = useState(10);
 
-  const handler = parasztactivityHandlerFactory(socket);
+  const handler = useParasztactivityEmitter();
 
   useEffect(() => {
     if (countdownState === 0) {
-      handler.startTurn(state.roomId);
+      handler.startTurn();
     }
     setTimeout(() => setCountdown(countdownState - 1), 1000);
   }, [countdownState]);
 
   const handleStartTurn = () => {
-    handler.startTurn(state.roomId);
+    handler.startTurn();
   };
 
   return (

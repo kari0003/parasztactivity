@@ -3,23 +3,22 @@ import {
   AddWordPayload,
   ParasztactivityEvent,
   PublicGameState,
-  StartGamePayload,
-  StartRoundPayload,
-  StartTurnPayload,
 } from '../state/parasztactivity/parasztactivity.interfaces';
 import { ParasztactivityActions } from '../state/parasztactivity/parasztactivity.actions';
 import { EventHandlerFactory } from './namespacehandler';
 import { Dispatch } from 'react';
+import { useSocket } from '../state/socket';
+import { useParasztactivity } from '../state/parasztactivity/parasztactivity.context';
 
 export type ParasztactivityHandler = {
-  getState: (roomId: number) => void;
-  init: (roomId: number) => void;
-  addWord: (word: string, roomId: number) => void;
-  startTurn: (roomId: number) => void;
-  startRound: (roomId: number) => void;
-  startGame: (roomId: number) => void;
-  drawWord: (roomId: number) => void;
-  putBackWord: (roomId: number) => void;
+  getState: () => void;
+  init: () => void;
+  addWord: (word: string) => void;
+  startTurn: () => void;
+  startRound: () => void;
+  startGame: () => void;
+  drawWord: () => void;
+  putBackWord: () => void;
 };
 
 export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): EventHandlerFactory => (
@@ -40,8 +39,11 @@ export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): E
   });
 };
 
-export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): ParasztactivityHandler => {
-  const getState = (roomId: number): void => {
+export const parasztactivityHandlerFactory = (
+  socket: SocketIOClient.Socket,
+  roomId: number,
+): ParasztactivityHandler => {
+  const getState = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -49,7 +51,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     socket.emit('getGameState', { game: 'parasztactivity', roomId });
   };
 
-  const init = (roomId: number): void => {
+  const init = (): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -57,7 +59,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     socket.emit('initGame', { game: 'parasztactivity', roomId });
   };
 
-  const addWord = (word: string, roomId: number): void => {
+  const addWord = (word: string): void => {
     if (roomId === undefined) {
       console.log(' No room set up for parasztactivityHandler!!!');
       return;
@@ -76,7 +78,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     });
   };
 
-  const startGame = (roomId: number): void => {
+  const startGame = (): void => {
     socket.emit('gameEvent', {
       gameEvent: {
         game: 'parasztactivity',
@@ -86,7 +88,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
       } as ParasztactivityEvent,
     });
   };
-  const startRound = (roomId: number): void => {
+  const startRound = (): void => {
     socket.emit('gameEvent', {
       gameEvent: {
         game: 'parasztactivity',
@@ -96,7 +98,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
       } as ParasztactivityEvent,
     });
   };
-  const startTurn = (roomId: number): void => {
+  const startTurn = (): void => {
     socket.emit('gameEvent', {
       gameEvent: {
         game: 'parasztactivity',
@@ -107,7 +109,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     });
   };
 
-  const drawWord = (roomId: number): void => {
+  const drawWord = (): void => {
     console.log('drawing word');
     socket.emit('gameEvent', {
       gameEvent: {
@@ -118,7 +120,7 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
       },
     });
   };
-  const putBackWord = (roomId: number): void => {
+  const putBackWord = (): void => {
     socket.emit('gameEvent', {
       gameEvent: {
         game: 'parasztactivity',
@@ -139,4 +141,10 @@ export const parasztactivityHandlerFactory = (socket: SocketIOClient.Socket): Pa
     drawWord,
     putBackWord,
   };
+};
+
+export const useParasztactivityEmitter = () => {
+  const socket = useSocket();
+  const game = useParasztactivity();
+  return parasztactivityHandlerFactory(socket, game.roomId);
 };

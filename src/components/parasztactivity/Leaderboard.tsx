@@ -1,13 +1,13 @@
 import { Player } from '../../interfaces';
 import { useApp } from '../../state/app.context';
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 
 function Leaderboard(): JSX.Element {
   const {
     state: { room },
   } = useApp();
 
-  const parasztactivityState = useParasztActivity();
+  const parasztactivityState = useParasztactivity();
 
   const playerList = (room ? room.players : ([] as Player[])).map((player) => {
     const score = parasztactivityState.scores[player.id] || 0;

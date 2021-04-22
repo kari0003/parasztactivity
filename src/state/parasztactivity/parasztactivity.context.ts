@@ -36,7 +36,7 @@ export const initialState: ParasztactivityState = {
   hatWordCount: 0,
 };
 
-export const useParasztActivity = (): ParasztactivityState => {
+export const useParasztactivity = (): ParasztactivityState => {
   const { state } = useApp();
   return state.game;
 };

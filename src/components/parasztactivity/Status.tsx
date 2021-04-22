@@ -1,7 +1,7 @@
-import { useParasztActivity } from '../../state/parasztactivity/parasztactivity.context';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 
 function Status(): JSX.Element {
-  const state = useParasztActivity();
+  const state = useParasztactivity();
   const currentWord = state.currentWord || 'Állapotmentes';
 
   return (

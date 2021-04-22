@@ -8,8 +8,6 @@ import {
   onError,
   profileReceived,
   updateRoom,
-  connect,
-  disconnect,
 } from '../state/actions';
 import { useApp } from '../state/app.context';
 import { parasztactivityHandlerFactory } from './parasztactivity.handler';
@@ -35,13 +33,13 @@ export const registerHandlerFactory = (dispatch: React.Dispatch<AnyAction>): Eve
 
   socket.on('joinChannelReply', (response: { room: Room }) => {
     console.log('joined', response);
-    parasztactivityHandlerFactory(socket).getState(response.room.id);
+    parasztactivityHandlerFactory(socket, response.room.id).getState();
     dispatch(joinRoomReply(response));
   });
 
   socket.on('createRoomReply', (response: { room: Room }) => {
     console.log('created', response);
-    parasztactivityHandlerFactory(socket).init(response.room.id);
+    parasztactivityHandlerFactory(socket, response.room.id).init();
   });
 
   socket.on('listRoomsReply', (response: Room[]) => {
