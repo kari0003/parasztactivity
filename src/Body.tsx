@@ -16,7 +16,11 @@ function AppBody(): JSX.Element {
           <h1>Parasztactivity</h1>
           {state.openForm === 'joinRoom' ? <JoinForm></JoinForm> : null}
           {state.openForm === 'createRoom' ? <CreateRoomForm></CreateRoomForm> : null}
-          <img src={`${process.env.PUBLIC_URL}/fedora.png`} className="App-logo" alt="logo" />
+          <img
+            src={`${process.env.PUBLIC_URL}/fedora.png`}
+            className="App-logo animate__animated animate__flipInX"
+            alt="logo"
+          />
           <p>Coming Soon</p>
           <RoomList></RoomList>
         </div>
