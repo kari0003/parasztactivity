@@ -19,6 +19,7 @@ export type ParasztactivityHandler = {
   startGame: () => void;
   drawWord: () => void;
   putBackWord: () => void;
+  guessWord: (word: string, playerId: string) => void;
 };
 
 export const registerParasztactivityHandler = (dispatch: Dispatch<AnyAction>): EventHandlerFactory => (
@@ -131,6 +132,20 @@ export const parasztactivityHandlerFactory = (
     });
   };
 
+  const guessWord = (word: string, playerId: string): void => {
+    socket.emit('gameEvent', {
+      gameEvent: {
+        game: 'parasztactivity',
+        eventType: 'guessWord',
+        roomId,
+        payload: {
+          playerId,
+          guess: word,
+        },
+      },
+    });
+  };
+
   return {
     getState,
     init,
@@ -140,6 +155,7 @@ export const parasztactivityHandlerFactory = (
     startGame,
     drawWord,
     putBackWord,
+    guessWord,
   };
 };
 

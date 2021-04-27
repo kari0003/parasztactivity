@@ -3,6 +3,8 @@ import { useApp } from '../../state/app.context';
 import { useLobbyEmitter } from '../../socketio/socket.service';
 import Message from './Message';
 import './Chat.css';
+import { useParasztactivityEmitter } from '../../socketio/parasztactivity.handler';
+import { useParasztactivity } from '../../state/parasztactivity/parasztactivity.context';
 
 function Chat(): JSX.Element {
   const { state: appState } = useApp();
@@ -10,6 +12,8 @@ function Chat(): JSX.Element {
   const [formState, setState] = useState({ message: '' });
 
   const socketHandler = useLobbyEmitter();
+  const parasztactivityState = useParasztactivity();
+  const parasztactivityEmitter = useParasztactivityEmitter();
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...formState, [event.target.name]: event.target.value });
@@ -26,6 +30,10 @@ function Chat(): JSX.Element {
       ...formState,
       message: '',
     });
+    if (parasztactivityState.isTurnInProgress && parasztactivityState.currentPlayer !== appState.profile?.id) {
+      console.log('not current player, submitting guess...');
+      parasztactivityEmitter.guessWord(formState.message, appState.profile?.id || '');
+    }
     socketHandler.sendChatMessage({ roomName: appState.room ? appState.room.name : '', chatMessage });
   };
 

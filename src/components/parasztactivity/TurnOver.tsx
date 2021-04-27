@@ -23,7 +23,6 @@ function TurnOver(): JSX.Element {
   };
 
   const nextPlayer = (roundRobinIndex: number, players: Player[]) => {
-    console.log('players', roundRobinIndex, players);
     const index = roundRobinIndex + 1 >= players.length ? 0 : roundRobinIndex + 1;
     return players[index]?.name || '';
   };

@@ -32,6 +32,7 @@ function Guesser(): JSX.Element {
         <div className="hatOverlay">
           <Timer></Timer>
           <div>{currentPlayer(state.currentPlayer, room?.players || [])} is describing words.</div>
+          <div>Write in chat to guess!</div>
         </div>
       </div>
     </div>
