@@ -105,6 +105,9 @@ export const reducer = createReducer(initialAppState, (builder) =>
       state.handshakeDone = true;
     })
     .addCase(ParasztactivityActions.gameState, (state, { payload }) => {
+      if (!payload.isCurrentWordDrawn || state.profile?.id !== payload.currentPlayer) {
+        state.game.currentWord = null;
+      }
       state.game = { ...state.game, ...payload };
     })
     .addCase(ParasztactivityActions.drawWord, (state, { payload }) => {

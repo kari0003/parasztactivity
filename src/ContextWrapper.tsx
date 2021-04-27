@@ -8,8 +8,12 @@ import { lobbyEmitterFactory, registerHandlerFactory } from './socketio/socket.s
 
 function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
   const existingToken = sessionStorage.getItem('token');
-  const existingName = localStorage.getItem('name') || 'Senki';
-  const [state, dispatch] = useReducer(reducer, { ...initialAppState, token: existingToken, name: existingName });
+  const existingName = localStorage.getItem('name');
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialAppState,
+    token: existingToken,
+    name: existingName || 'Senki',
+  });
   const socket = useSocket();
   const registry = useSocketEventHandler();
 
@@ -19,7 +23,7 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
       'handshake',
       handshakeHandlerFactory(
         lobbyEmitterFactory(socket, state.token),
-        handshakeEmitterFactory(socket, state.token),
+        handshakeEmitterFactory(socket, state.token, existingName),
         dispatch,
       ),
     );

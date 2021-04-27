@@ -33,6 +33,9 @@ export type PublicGameState = {
   roomId: number;
   currentPlayer: string | null;
   currentTurnStart: number | null;
+  isGameStarted: boolean;
+  isTurnInProgress: boolean;
+  isRoundInProgress: boolean;
   settings: {
     minWordPerPlayer: number;
     maxWordPerPlayer: number;
@@ -41,6 +44,7 @@ export type PublicGameState = {
   scores: { [playerId: string]: number };
   hatWordCount: number;
   roundRobinIndex: number;
+  isCurrentWordDrawn: boolean;
 };
 
 export type AddWordPayload = {

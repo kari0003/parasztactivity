@@ -9,6 +9,7 @@ export type ParasztactivityState = {
   isGameStarted: boolean;
   isTurnInProgress: boolean;
   isRoundInProgress: boolean;
+  roundRobinIndex: number;
   settings: {
     minWordPerPlayer: number;
     maxWordPerPlayer: number;
@@ -16,6 +17,7 @@ export type ParasztactivityState = {
   };
   scores: { [playerId: string]: number };
   hatWordCount: number;
+  isCurrentWordDrawn: boolean;
 };
 
 export const initialState: ParasztactivityState = {
@@ -27,6 +29,7 @@ export const initialState: ParasztactivityState = {
   isGameStarted: false,
   isTurnInProgress: false,
   isRoundInProgress: false,
+  roundRobinIndex: -1,
   settings: {
     minWordPerPlayer: 0,
     maxWordPerPlayer: 3,
@@ -34,6 +37,7 @@ export const initialState: ParasztactivityState = {
   },
   scores: {},
   hatWordCount: 0,
+  isCurrentWordDrawn: false,
 };
 
 export const useParasztactivity = (): ParasztactivityState => {

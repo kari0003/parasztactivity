@@ -33,8 +33,8 @@ export const registerHandlerFactory = (dispatch: React.Dispatch<AnyAction>): Eve
 
   socket.on('joinChannelReply', (response: { room: Room }) => {
     console.log('joined', response);
-    parasztactivityHandlerFactory(socket, response.room.id).getState();
     dispatch(joinRoomReply(response));
+    parasztactivityHandlerFactory(socket, response.room.id).getState();
   });
 
   socket.on('createRoomReply', (response: { room: Room }) => {

@@ -32,10 +32,14 @@ export const handshakeHandlerFactory = (
   });
 };
 
-export const handshakeEmitterFactory = (socket: SocketIOClient.Socket, token: string | null): HandshakeEmitter => {
+export const handshakeEmitterFactory = (
+  socket: SocketIOClient.Socket,
+  token: string | null,
+  name?: string | null,
+): HandshakeEmitter => {
   return {
     handshake: () => {
-      socket.emit('handshake', { token });
+      socket.emit('handshake', { token, name });
     },
   };
 };
