@@ -1,5 +1,6 @@
 import './App.css';
 import CreateRoomForm from './components/CreateRoomForm';
+import DrawingBoard from './components/drawing/DrawingBoard';
 import JoinForm from './components/JoinForm';
 import Lobby from './components/Lobby';
 import RoomList from './components/RoomList';
@@ -23,6 +24,8 @@ function AppBody(): JSX.Element {
           />
           <p>Coming Soon</p>
           <RoomList></RoomList>
+          <br />
+          <DrawingBoard></DrawingBoard>
         </div>
       )}
     </div>

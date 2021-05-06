@@ -1,5 +1,6 @@
 import './App.css';
 import AppBody from './Body';
+import DrawingBoard from './components/drawing/DrawingBoard';
 import Header from './components/Header';
 import StatusBar from './components/StatusBar';
 import ContextWrapper from './ContextWrapper';
