@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 function DrawingBoard(): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isPainting, setIsPainting] = useState(false);
   const [drawState, setDrawState] = useState({
-    isMouseDown: false,
     startX: 0,
     startY: 0,
-    endX: 0,
-    endY: 0,
+  });
+  const [styling, _setStyling] = useState({
     lineWidth: 5,
     color: '#222222',
   });
+  const [canvasCoords, setCanvasCoords] = useState({ x: 0, y: 0 });
 
   const drawLine = (startX: number, startY: number, endX: number, endY: number, lineWidth = 10, color = '#000000') => {
     const canvas = canvasRef.current;
@@ -33,6 +34,43 @@ function DrawingBoard(): JSX.Element {
     context.lineTo(endX, endY);
     context.stroke();
   };
+  const mouseDownHandler = useCallback(
+    (e: MouseEvent) => {
+      setIsPainting(true);
+      setDrawState({
+        startX: e.x - canvasCoords.x,
+        startY: e.y - canvasCoords.y,
+      });
+    },
+    [setIsPainting, setDrawState],
+  );
+
+  const mouseMoveHandler = useCallback(
+    (e: MouseEvent) => {
+      if (isPainting) {
+        drawLine(
+          drawState.startX,
+          drawState.startY,
+          e.x - canvasCoords.x,
+          e.y - canvasCoords.y,
+          styling.lineWidth,
+          styling.color,
+        );
+        setDrawState({
+          startX: e.x - canvasCoords.x,
+          startY: e.y - canvasCoords.y,
+        });
+      }
+    },
+    [isPainting, drawState, setDrawState],
+  );
+
+  const mouseUpHandler = useCallback(
+    (e: MouseEvent) => {
+      setIsPainting(false);
+    },
+    [setIsPainting],
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,59 +79,14 @@ function DrawingBoard(): JSX.Element {
       return;
     }
     const canvasRect = canvas.getBoundingClientRect();
-    const { left: canvasX, top: canvasY } = canvasRect;
+    setCanvasCoords({ x: canvasRect.left, y: canvasRect.top });
 
-    canvas.onmousedown = (e: MouseEvent) => {
-      console.log(canvasX, canvasY, e.x, e.y);
-      if (!drawState.isMouseDown) {
-        setDrawState({
-          isMouseDown: true,
-          startX: e.x - canvasX,
-          startY: e.y - canvasY,
-          lineWidth: drawState.lineWidth,
-          color: drawState.color,
-          endX: drawState.endX,
-          endY: drawState.endY,
-        });
-      }
-    };
+    canvas.addEventListener('mousedown', mouseDownHandler);
 
-    canvas.onmousemove = (e: MouseEvent) => {
-      if (drawState.isMouseDown) {
-        drawLine(
-          drawState.startX,
-          drawState.startY,
-          e.x - canvasX,
-          e.y - canvasY,
-          drawState.lineWidth,
-          drawState.color,
-        );
-        setDrawState({
-          isMouseDown: drawState.isMouseDown,
-          startX: e.x - canvasX,
-          startY: e.y - canvasY,
-          lineWidth: drawState.lineWidth,
-          color: drawState.color,
-          endX: e.x - canvasX,
-          endY: e.y - canvasY,
-        });
-      }
-    };
+    canvas.addEventListener('mousemove', mouseMoveHandler);
 
-    canvas.onmouseup = (e: MouseEvent) => {
-      console.log('onMouseUp', drawState);
-      if (drawState.isMouseDown) {
-        setDrawState({
-          isMouseDown: false,
-          startX: drawState.startX,
-          startY: drawState.startY,
-          lineWidth: drawState.lineWidth,
-          color: drawState.color,
-          endX: e.x - canvasX,
-          endY: e.y - canvasY,
-        });
-      }
-    };
+    canvas.addEventListener('mouseup', mouseUpHandler);
+    canvas.addEventListener('mouseleave', mouseUpHandler);
 
     const context = canvas.getContext('2d');
 
@@ -102,9 +95,15 @@ function DrawingBoard(): JSX.Element {
       return;
     }
 
-    context.fillStyle = '#ffcc00';
+    context.fillStyle = '#ffcc0012';
     context.fillRect(0, 0, canvas.width, canvas.height);
-  }, [canvasRef]);
+    return () => {
+      canvas.removeEventListener('mousedown', mouseDownHandler);
+      canvas.removeEventListener('mousemove', mouseMoveHandler);
+      canvas.removeEventListener('mouseup', mouseUpHandler);
+      canvas.removeEventListener('mouseleave', mouseUpHandler);
+    };
+  }, [canvasRef, mouseDownHandler, mouseMoveHandler, mouseUpHandler]);
   return (
     <div className="drawingBoard">
       <canvas ref={canvasRef}></canvas>
