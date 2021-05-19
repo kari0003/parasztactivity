@@ -5,6 +5,7 @@ import { AppContext, initialAppState, reducer, State } from './state/app.context
 import { registerParasztactivityHandler } from './socketio/parasztactivity.handler';
 import { useSocket, useSocketEventHandler } from './state/socket';
 import { lobbyEmitterFactory, registerHandlerFactory } from './socketio/socket.service';
+import { drawingBoardHandlerFactory } from './socketio/drawingBoardHandler';
 
 function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
   const existingToken = sessionStorage.getItem('token');
@@ -28,6 +29,7 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
       ),
     );
     registry.register('parasztactivity', registerParasztactivityHandler(dispatch));
+    registry.register('drawingBoard', drawingBoardHandlerFactory());
     console.log('register effect has run for', socket.id);
   }, [socket]);
 
