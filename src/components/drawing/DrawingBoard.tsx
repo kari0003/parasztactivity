@@ -15,7 +15,6 @@ function DrawingBoard(): JSX.Element {
     lineWidth: 5,
     color: '#222222',
   });
-  const [canvasCoords, setCanvasCoords] = useState({ x: 0, y: 0 });
 
   const drawLine = (
     startX: number,
@@ -76,43 +75,51 @@ function DrawingBoard(): JSX.Element {
     context.fill();
   };
 
+  const getCanvasCoords = (x: number, y: number): { x: number; y: number } => {
+    const canvas = canvasRef.current;
+    if (canvas === null) {
+      console.log('canvas is null');
+      return { x: 0, y: 0 };
+    }
+    const canvasRect = canvas.getBoundingClientRect();
+    return {
+      x: x - canvasRect.left,
+      y: y - canvasRect.top,
+    };
+  };
+
   const mouseDownHandler = useCallback(
     (e: MouseEvent) => {
       setIsPainting(true);
-      drawDot(e.x - canvasCoords.x, e.y - canvasCoords.y, styling.lineWidth, styling.color);
+      const point = getCanvasCoords(e.x, e.y);
+      drawDot(point.x, point.y, styling.lineWidth, styling.color);
       setDrawState({
-        startX: e.x - canvasCoords.x,
-        startY: e.y - canvasCoords.y,
+        startX: point.x,
+        startY: point.y,
       });
     },
-    [canvasCoords, setIsPainting, setDrawState],
+    [setIsPainting, setDrawState],
   );
 
   const mouseMoveHandler = useCallback(
     (e: MouseEvent) => {
       if (isPainting) {
-        drawLine(
-          drawState.startX,
-          drawState.startY,
-          e.x - canvasCoords.x,
-          e.y - canvasCoords.y,
-          styling.lineWidth,
-          styling.color,
-        );
+        const point = getCanvasCoords(e.x, e.y);
+        drawLine(drawState.startX, drawState.startY, point.x, point.y, styling.lineWidth, styling.color);
         setDrawState({
-          startX: e.x - canvasCoords.x,
-          startY: e.y - canvasCoords.y,
+          startX: point.x,
+          startY: point.y,
         });
       }
     },
-    [isPainting, canvasCoords, drawState, setDrawState],
+    [isPainting, drawState, setDrawState],
   );
 
   const mouseUpHandler = useCallback(
     (e: MouseEvent) => {
       setIsPainting(false);
     },
-    [canvasCoords, setIsPainting],
+    [setIsPainting],
   );
 
   const clearCanvas = () => {
@@ -139,21 +146,6 @@ function DrawingBoard(): JSX.Element {
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
-
-  useEffect(() => {
-    const windowResizeHandler = () => {
-      const canvas = canvasRef.current;
-      if (canvas === null) {
-        console.log('canvas is null');
-        return;
-      }
-      const canvasRect = canvas.getBoundingClientRect();
-      setCanvasCoords({ x: canvasRect.left, y: canvasRect.top });
-    };
-    window.addEventListener('resize', windowResizeHandler);
-
-    return () => window.removeEventListener('resize', windowResizeHandler);
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
