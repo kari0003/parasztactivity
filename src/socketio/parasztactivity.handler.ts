@@ -159,7 +159,7 @@ export const parasztactivityHandlerFactory = (
   };
 };
 
-export const useParasztactivityEmitter = () => {
+export const useParasztactivityEmitter = (): ParasztactivityHandler => {
   const socket = useSocket();
   const game = useParasztactivity();
   return parasztactivityHandlerFactory(socket, game.roomId);

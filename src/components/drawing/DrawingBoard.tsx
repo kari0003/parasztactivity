@@ -51,7 +51,6 @@ function DrawingBoard(): JSX.Element {
   };
 
   const drawDot = (x: number, y: number, lineWidth = 10, color = '#000000', remote = false) => {
-    console.log('lol drawDot', x, y);
     if (!remote) {
       drawingBoardEmitter.drawDot(x, y, lineWidth, color);
     }
@@ -98,7 +97,7 @@ function DrawingBoard(): JSX.Element {
         startY: point.y,
       });
     },
-    [setIsPainting, setDrawState],
+    [setIsPainting, setDrawState, styling],
   );
 
   const mouseMoveHandler = useCallback(
@@ -112,7 +111,7 @@ function DrawingBoard(): JSX.Element {
         });
       }
     },
-    [isPainting, drawState, setDrawState],
+    [isPainting, drawState, setDrawState, styling],
   );
 
   const mouseUpHandler = useCallback(
