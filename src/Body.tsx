@@ -25,7 +25,7 @@ function AppBody(): JSX.Element {
           <p>Coming Soon</p>
           <RoomList></RoomList>
           <br />
-          <DrawingBoard></DrawingBoard>
+          <DrawingBoard roomId={0}></DrawingBoard>
         </div>
       )}
     </div>

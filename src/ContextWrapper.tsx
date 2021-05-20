@@ -29,7 +29,7 @@ function ContextWrapper(props: { children: React.ReactNode }): JSX.Element {
       ),
     );
     registry.register('parasztactivity', registerParasztactivityHandler(dispatch));
-    registry.register('drawingBoard', drawingBoardHandlerFactory());
+    // registry.register('drawingBoard', drawingBoardHandlerFactory());
     console.log('register effect has run for', socket.id);
   }, [socket]);
 

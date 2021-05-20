@@ -1,4 +1,5 @@
-import { EventHandlerFactory } from './namespacehandler';
+import { EventHandlerFactory, RemoveListenersFunct } from './namespacehandler';
+import * as canvasUtils from '../components/drawing/canvasUtils';
 
 export type DrawingBoardEmitter = {
   drawDot: (x: number, y: number, lineWidth: number, color: string) => void;
@@ -6,21 +7,33 @@ export type DrawingBoardEmitter = {
   clear: () => void;
 };
 
-export const drawingBoardHandlerFactory = (): EventHandlerFactory => (socket: SocketIOClient.Socket): void => {
-  socket.on('drawDot', (payload: { x: number; y: number; lineWidth: number; color: string }) => {
+export const drawingBoardHandlerFactory = (canvas: HTMLCanvasElement | null): EventHandlerFactory => (
+  socket: SocketIOClient.Socket,
+): RemoveListenersFunct => {
+  const onDrawDot = (payload: canvasUtils.DrawDotProps & { timestamp: number }) => {
     console.log('drawDot', payload);
-  });
-  socket.on('drawLine', (payload: any) => {
+    canvasUtils.drawDot(canvas, payload);
+  };
+  const onDrawLine = (payload: canvasUtils.DrawLineProps & { timestamp: number }) => {
     console.log('drawLine', payload);
-  });
-
-  socket.on('clear', (payload: any) => {
+    canvasUtils.drawLine(canvas, payload);
+  };
+  const onClear = (payload: { timestamp: number }) => {
     console.log('clear', payload);
-  });
-  return;
+    canvasUtils.drawClear(canvas);
+  };
+
+  socket.on('drawDot', onDrawDot);
+  socket.on('drawLine', onDrawLine);
+  socket.on('clear', onClear);
+  return () => {
+    socket.off('drawDot', onDrawDot);
+    socket.removeListener('drawLine', onDrawLine);
+    socket.removeListener('clear', onClear);
+  };
 };
 
-export const drawingBoardEmitterFactory = (socket: SocketIOClient.Socket): DrawingBoardEmitter => {
+export const drawingBoardEmitterFactory = (socket: SocketIOClient.Socket, roomId: number): DrawingBoardEmitter => {
   return {
     drawDot: (x: number, y: number, lineWidth = 10, color = '#000000'): void => {
       socket.emit('drawDot', {

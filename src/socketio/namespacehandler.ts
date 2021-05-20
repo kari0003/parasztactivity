@@ -3,6 +3,8 @@ export type EventHandlerRegistry = {
   register: (name: string, eventHandlerFactory: EventHandlerFactory) => void;
 };
 
+export type RemoveListenersFunct = () => void;
+
 export const createEventHandlerRegistry = (socket: SocketIOClient.Socket): EventHandlerRegistry => {
   const registry: Record<string, boolean> = {};
   const register: (name: string, eventHandlerFactory: EventHandlerFactory) => void = (name, handlerFactory) => {

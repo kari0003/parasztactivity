@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { drawingBoardEmitterFactory } from '../../socketio/drawingBoardHandler';
+import { drawingBoardEmitterFactory, drawingBoardHandlerFactory } from '../../socketio/drawingBoardHandler';
 import { useSocket } from '../../state/socket';
 
-function DrawingBoard(): JSX.Element {
+function DrawingBoard(prop: { roomId: number }): JSX.Element {
   const socket = useSocket();
-  const drawingBoardEmitter = drawingBoardEmitterFactory(socket);
+  const drawingBoardEmitter = drawingBoardEmitterFactory(socket, prop.roomId);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isPainting, setIsPainting] = useState(false);
   const [drawState, setDrawState] = useState({
@@ -145,6 +145,14 @@ function DrawingBoard(): JSX.Element {
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
+
+  useEffect(() => {
+    const handler = drawingBoardHandlerFactory(canvasRef.current);
+
+    const clearListeners = handler(socket);
+
+    return clearListeners;
+  }, [canvasRef, socket]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
