@@ -25,7 +25,7 @@ function Chat(): JSX.Element {
     if (formState.message.length <= 0) {
       return;
     }
-    const chatMessage = { name: appState.name, message: formState.message };
+    const chatMessage = { name: appState.name, message: formState.message, type: 'basic' };
     setState({
       ...formState,
       message: '',
@@ -41,7 +41,7 @@ function Chat(): JSX.Element {
     <div className="chatWrapper">
       <div className="messageScroll">
         {appState.chat.messages.map((message, id) => {
-          return <Message key={id} name={message.name} message={message.message}></Message>;
+          return <Message key={id} name={message.name} message={message.message} type={message.type}></Message>;
         })}
       </div>
       <div className="chatSend">

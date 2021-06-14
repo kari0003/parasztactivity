@@ -54,7 +54,7 @@ export const initialAppState: AppState = {
   connected: false,
   rooms: undefined,
   chat: {
-    messages: [{ name: 'Portás', message: 'Szia Uram!' }],
+    messages: [],
   },
   connection: {
     status: ConnectionStatus.CONNECTING,

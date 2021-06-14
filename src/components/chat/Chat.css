@@ -29,6 +29,11 @@
   color: #000000;
 }
 
+.chatMessageSystem {
+  color: antiquewhite;
+  font-weight: bold;
+}
+
 .chatSend form {
   display: flex;
   flex-direction: row;

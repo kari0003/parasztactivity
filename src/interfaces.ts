@@ -4,7 +4,7 @@ export enum RoomStatus {
   STATS = 'stats',
 }
 
-export type ChatMessage = { name: string; message: string };
+export type ChatMessage = { name: string; message: string; type: string };
 
 export interface Room {
   name: string;
